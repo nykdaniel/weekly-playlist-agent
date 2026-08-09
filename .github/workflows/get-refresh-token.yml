@@ -1,0 +1,116 @@
+name: Get Spotify refresh token
+
+# One-time helper, run manually from the Actions tab. Two steps:
+#   1. Run with no "code" input -> it prints a Spotify login link in the job summary.
+#      Open that link, log in, click Agree. Spotify will redirect your browser to a
+#      "page can't be reached" address - that's expected. Copy the "code" value out
+#      of the browser's address bar.
+#   2. Run this workflow again, this time pasting that code into the "code" input.
+#      It will print your refresh token in the job summary. Copy it into a new repo
+#      secret named SPOTIFY_REFRESH_TOKEN.
+on:
+  workflow_dispatch:
+    inputs:
+      code:
+        description: "Leave blank to get the login link. Paste the code from the redirect URL to finish."
+        required: false
+        default: ""
+
+jobs:
+  get-token:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request login link or exchange code
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          CODE: ${{ github.event.inputs.code }}
+        run: |
+          python3 - <<'EOF'
+          import base64
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          client_id = os.environ["SPOTIFY_CLIENT_ID"]
+          client_secret = os.environ["SPOTIFY_CLIENT_SECRET"]
+          code = os.environ.get("CODE", "").strip()
+          redirect_uri = "http://127.0.0.1:8080/callback"
+          scopes = (
+              "user-follow-read "
+              "playlist-read-private "
+              "playlist-read-collaborative "
+              "playlist-modify-public "
+              "playlist-modify-private"
+          )
+
+          summary_path = os.environ["GITHUB_STEP_SUMMARY"]
+
+          if not code:
+              params = {
+                  "client_id": client_id,
+                  "response_type": "code",
+                  "redirect_uri": redirect_uri,
+                  "scope": scopes,
+              }
+              url = "https://accounts.spotify.com/authorize?" + urllib.parse.urlencode(params)
+              with open(summary_path, "a") as f:
+                  f.write("## Step 1: log in\n\n")
+                  f.write(f"[Click here to log into Spotify]({url})\n\n")
+                  f.write(
+                      "After you click **Agree**, your browser will try to load "
+                      "`http://127.0.0.1:8080/callback?code=...` and fail to connect - that's expected, "
+                      "nothing is running there.\n\n"
+                      "Copy everything after `code=` in the address bar (and before any `&` if present), "
+                      "then re-run this workflow with that value pasted into the **code** input.\n"
+                  )
+              print("Printed login link to the job summary.")
+              raise SystemExit(0)
+
+          data = urllib.parse.urlencode(
+              {
+                  "grant_type": "authorization_code",
+                  "code": code,
+                  "redirect_uri": redirect_uri,
+              }
+          ).encode()
+          auth_header = base64.b64encode(f"{client_id}:{client_secret}".encode()).decode()
+          req = urllib.request.Request(
+              "https://accounts.spotify.com/api/token",
+              data=data,
+              headers={
+                  "Authorization": f"Basic {auth_header}",
+                  "Content-Type": "application/x-www-form-urlencoded",
+              },
+          )
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  token_info = json.load(resp)
+          except urllib.error.HTTPError as e:
+              body = e.read().decode()
+              with open(summary_path, "a") as f:
+                  f.write("## Exchange failed\n\n")
+                  f.write(
+                      "The code is single-use and expires after a few minutes. "
+                      "Re-run this workflow with a blank **code** input to get a fresh login link, "
+                      "then immediately re-run it again with the new code.\n\n"
+                  )
+                  f.write(f"Error detail: `{body}`\n")
+              raise SystemExit(1)
+
+          refresh_token = token_info["refresh_token"]
+          with open(summary_path, "a") as f:
+              f.write("## Step 2: save your refresh token\n\n")
+              f.write(
+                  "Go to **Settings -> Secrets and variables -> Actions** in this repo, "
+                  "add a new repository secret named `SPOTIFY_REFRESH_TOKEN`, and paste this value:\n\n"
+              )
+              f.write(f"```\n{refresh_token}\n```\n\n")
+              f.write(
+                  "Once that secret is saved, this token never expires on its own, so you won't need "
+                  "to repeat this workflow again. You may want to delete this workflow run afterward "
+                  "since the token is visible above.\n"
+              )
+          print("Refresh token printed to the job summary.")
+          EOF
