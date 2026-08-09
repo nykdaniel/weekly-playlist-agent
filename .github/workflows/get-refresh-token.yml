@@ -22,7 +22,7 @@ jobs:
     steps:
       - name: Request login link or exchange code
         env:
-          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_ID: ${{ vars.SPOTIFY_CLIENT_ID_PUBLIC }}
           SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
           CODE: ${{ github.event.inputs.code }}
         run: |
