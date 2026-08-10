@@ -46,6 +46,41 @@ PLAYLIST_NAME_PREFIX = "Discover"
 ARTIST_FETCH_WORKERS = 10       # concurrent requests when checking artists for new releases
 PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
 
+# Spotify's genre tags are extremely granular (hundreds of micro-genres like
+# "gqom" or "deathstep"). Rather than one playlist per exact tag, bucket them
+# into broader families so we don't end up with dozens of 1-track playlists.
+# Checked in order, first match wins; a genre that matches nothing falls into
+# "Other".
+GENRE_BUCKETS = [
+    ("Drum & Bass", ["drum and bass", "dnb", "d&b", "jungle", "liquid funk", "drumstep"]),
+    ("Bass Music", ["dubstep", "deathstep", "riddim", "bassline", "brostep", "edm trap", "trap edm", "bass music"]),
+    ("Hard Dance", ["hardstyle", "hardcore", "hard house", "gabber", "hard dance"]),
+    ("Techno", ["techno"]),
+    ("Trance", ["trance"]),
+    ("House", ["house"]),
+    ("Afro", ["afro", "amapiano", "gqom"]),
+    ("Reggae & Dancehall", ["reggae", "dancehall", "ragga", "dub", "lovers rock"]),
+    ("Latin", ["latin", "reggaeton", "sertanejo", "cumbia", "salsa", "bachata", "merengue"]),
+    ("R&B & Soul", ["r&b", "rnb", "soul"]),
+    ("Hip-Hop", ["hip hop", "rap", "trap", "grime", "drill"]),
+    ("Jazz", ["jazz", "swing"]),
+    ("Folk & Acoustic", ["folk", "acoustic", "singer-songwriter"]),
+    ("Classical", ["classical", "neoclassical", "orchestral", "chamber"]),
+    ("Metal", ["metal"]),
+    ("Rock & Punk", ["rock", "punk"]),
+    ("Indie & Alternative", ["indie", "alternative"]),
+    ("Electronic", ["electro", "edm", "glitch", "idm", "downtempo", "chillout", "ambient", "synth"]),
+    ("Pop", ["pop"]),
+]
+
+
+def bucket_for_genre(genre):
+    g = genre.lower()
+    for bucket_name, keywords in GENRE_BUCKETS:
+        if any(kw in g for kw in keywords):
+            return bucket_name
+    return "Other"
+
 
 def log(msg):
     print(msg, flush=True)
@@ -245,9 +280,9 @@ def get_genre_discovery_tracks(sp, genres, state, already_found, artist_genre_ca
     return new_tracks
 
 
-def ensure_playlist(sp, user_id, genre, state):
-    playlist_name = f"{PLAYLIST_NAME_PREFIX}: {genre.title()}"
-    playlist_id = state["genre_playlists"].get(genre)
+def ensure_playlist(sp, user_id, bucket, state):
+    playlist_name = f"{PLAYLIST_NAME_PREFIX}: {bucket}"
+    playlist_id = state["genre_playlists"].get(bucket)
     if playlist_id:
         try:
             sp.playlist(playlist_id, fields="id")
@@ -268,7 +303,7 @@ def ensure_playlist(sp, user_id, genre, state):
         playlist_id = playlist["id"]
         log(f'Created playlist "{playlist_name}"')
 
-    state["genre_playlists"][genre] = playlist_id
+    state["genre_playlists"][bucket] = playlist_id
     return playlist_id
 
 
@@ -314,18 +349,19 @@ def main():
         save_state(state)
         return
 
-    by_genre = {}
+    by_bucket = {}
     for track in all_new_tracks.values():
-        genres_for_track = track["genres"] or ["other"]
-        for genre in genres_for_track:
-            by_genre.setdefault(genre, []).append(track)
+        genres_for_track = track["genres"] or []
+        buckets = {bucket_for_genre(g) for g in genres_for_track} or {"Other"}
+        for bucket in buckets:
+            by_bucket.setdefault(bucket, []).append(track)
 
     today = date.today().isoformat()
-    for genre, tracks in by_genre.items():
-        playlist_id = ensure_playlist(sp, user_id, genre, state)
+    for bucket, tracks in by_bucket.items():
+        playlist_id = ensure_playlist(sp, user_id, bucket, state)
         uris = [t["uri"] for t in tracks]
         add_tracks_to_playlist(sp, playlist_id, uris)
-        log(f'Added {len(uris)} track(s) to "{PLAYLIST_NAME_PREFIX}: {genre.title()}"')
+        log(f'Added {len(uris)} track(s) to "{PLAYLIST_NAME_PREFIX}: {bucket}"')
 
     for track in all_new_tracks.values():
         state["seen_tracks"][track["id"]] = today
