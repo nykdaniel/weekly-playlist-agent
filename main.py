@@ -21,6 +21,7 @@ import json
 import os
 import sys
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta
 
 import spotipy
@@ -42,6 +43,8 @@ STATE_PRUNE_DAYS = 180          # forget seen-track history older than this
 MAX_GENRES_FOR_DISCOVERY = 12   # cap search calls for genre-based discovery
 GENRE_SEARCH_LIMIT = 20         # tracks pulled per genre search
 PLAYLIST_NAME_PREFIX = "Discover"
+ARTIST_FETCH_WORKERS = 10       # concurrent requests when checking artists for new releases
+PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
 
 
 def log(msg):
@@ -156,39 +159,52 @@ def hydrate_genres(sp, artists_without_genres, known_artists):
                 known_artists[artist["id"]] = artist
 
 
+def _fetch_artist_new_tracks(sp, artist_id, artist, cutoff):
+    found = {}
+    try:
+        albums = sp.artist_albums(artist_id, include_groups="album,single", limit=50)
+    except spotipy.SpotifyException as e:
+        log(f'WARNING: could not fetch albums for artist "{artist.get("name")}": {e}')
+        return found
+
+    recent_albums = [
+        a for a in albums["items"] if parse_release_date(a["release_date"]) >= cutoff
+    ]
+    for album in recent_albums:
+        try:
+            tracks = sp.album_tracks(album["id"], limit=50)
+        except spotipy.SpotifyException as e:
+            log(f'WARNING: could not fetch tracks for album "{album["name"]}": {e}')
+            continue
+        for track in tracks["items"]:
+            found[track["id"]] = {
+                "id": track["id"],
+                "uri": track["uri"],
+                "name": track["name"],
+                "genres": artist.get("genres", []),
+            }
+    return found
+
+
 def get_new_releases(sp, seed_artists, state):
     cutoff = date.today() - timedelta(days=NEW_RELEASE_LOOKBACK_DAYS)
     new_tracks = {}  # track_id -> {id, uri, name, genres}
+    items = list(seed_artists.items())
+    checked = 0
 
-    for artist_id, artist in seed_artists.items():
-        try:
-            albums = sp.artist_albums(
-                artist_id, include_groups="album,single", limit=50
-            )
-        except spotipy.SpotifyException as e:
-            log(f'WARNING: could not fetch albums for artist "{artist.get("name")}": {e}')
-            continue
-
-        recent_albums = [
-            a
-            for a in albums["items"]
-            if parse_release_date(a["release_date"]) >= cutoff
-        ]
-        for album in recent_albums:
-            try:
-                tracks = sp.album_tracks(album["id"], limit=50)
-            except spotipy.SpotifyException as e:
-                log(f'WARNING: could not fetch tracks for album "{album["name"]}": {e}')
-                continue
-            for track in tracks["items"]:
-                if track["id"] in state["seen_tracks"] or track["id"] in new_tracks:
+    with ThreadPoolExecutor(max_workers=ARTIST_FETCH_WORKERS) as executor:
+        futures = {
+            executor.submit(_fetch_artist_new_tracks, sp, artist_id, artist, cutoff): artist_id
+            for artist_id, artist in items
+        }
+        for future in as_completed(futures):
+            checked += 1
+            if checked % PROGRESS_LOG_INTERVAL == 0 or checked == len(items):
+                log(f"  ...checked {checked}/{len(items)} artists")
+            for track_id, track in future.result().items():
+                if track_id in state["seen_tracks"]:
                     continue
-                new_tracks[track["id"]] = {
-                    "id": track["id"],
-                    "uri": track["uri"],
-                    "name": track["name"],
-                    "genres": artist.get("genres", []),
-                }
+                new_tracks[track_id] = track
     return new_tracks
 
 
