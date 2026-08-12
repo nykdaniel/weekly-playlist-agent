@@ -46,6 +46,17 @@ PLAYLIST_NAME_PREFIX = "Discover"
 ARTIST_FETCH_WORKERS = 10       # concurrent requests when checking artists for new releases
 PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
 
+# Always searched for new tracks in addition to your auto-detected top genres,
+# regardless of how little (or no) presence they have among your seed artists -
+# hand-picked to broaden discovery beyond what your library already leans toward.
+ADDITIONAL_DISCOVERY_GENRES = [
+    "grime",
+    "funk",
+    "hebrew folk",
+    "organic downtempo",
+    "global bass",
+]
+
 # Spotify's genre tags are extremely granular (hundreds of micro-genres like
 # "gqom" or "deathstep"). Rather than one playlist per exact tag, bucket them
 # into broader families so we don't end up with dozens of 1-track playlists.
@@ -337,7 +348,9 @@ def main():
     log(f"  {len(new_release_tracks)} new tracks from releases")
 
     log("Looking for new tracks in matching genres...")
-    genres = top_genres(seed_artists, MAX_GENRES_FOR_DISCOVERY)
+    auto_genres = top_genres(seed_artists, MAX_GENRES_FOR_DISCOVERY)
+    genres = auto_genres + [g for g in ADDITIONAL_DISCOVERY_GENRES if g not in auto_genres]
+    log(f"  searching {len(genres)} genres: {', '.join(genres)}")
     discovery_tracks = get_genre_discovery_tracks(
         sp, genres, state, new_release_tracks, seed_artists
     )
