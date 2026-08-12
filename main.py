@@ -8,13 +8,13 @@ Looks at:
 For those artists it finds new releases, and (since Spotify's
 Recommendations/Related-Artists endpoints aren't available to apps created
 after Nov 2024) discovers other new tracks in the same genres using
-Spotify's search "tag:new" filter. Everything found gets grouped by genre
-and pushed into one auto-managed playlist per genre.
+Spotify's search "tag:new" filter. Everything found gets pushed into a
+single "Discover Daily" playlist.
 
-State (which tracks we've already added, and which playlist ID belongs to
-which genre) is kept in state.json, which this script rewrites in place.
-The GitHub Actions workflow commits that file back to the repo after each
-run so runs are idempotent and don't spam playlists with duplicates.
+State (which tracks we've already added, and the playlist's ID) is kept in
+state.json, which this script rewrites in place. The GitHub Actions workflow
+commits that file back to the repo after each run so runs are idempotent
+and don't spam the playlist with duplicates.
 """
 
 import json
@@ -42,7 +42,7 @@ NEW_RELEASE_LOOKBACK_DAYS = 14  # how far back to consider an artist's release "
 STATE_PRUNE_DAYS = 180          # forget seen-track history older than this
 MAX_GENRES_FOR_DISCOVERY = 12   # cap search calls for genre-based discovery
 GENRE_SEARCH_LIMIT = 20         # tracks pulled per genre search
-PLAYLIST_NAME_PREFIX = "Discover"
+PLAYLIST_NAME = "Discover Daily"
 ARTIST_FETCH_WORKERS = 10       # concurrent requests when checking artists for new releases
 PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
 
@@ -56,41 +56,6 @@ ADDITIONAL_DISCOVERY_GENRES = [
     "organic downtempo",
     "global bass",
 ]
-
-# Spotify's genre tags are extremely granular (hundreds of micro-genres like
-# "gqom" or "deathstep"). Rather than one playlist per exact tag, bucket them
-# into broader families so we don't end up with dozens of 1-track playlists.
-# Checked in order, first match wins; a genre that matches nothing falls into
-# "Other".
-GENRE_BUCKETS = [
-    ("Drum & Bass", ["drum and bass", "dnb", "d&b", "jungle", "liquid funk", "drumstep"]),
-    ("Bass Music", ["dubstep", "deathstep", "riddim", "bassline", "brostep", "edm trap", "trap edm", "bass music"]),
-    ("Hard Dance", ["hardstyle", "hardcore", "hard house", "gabber", "hard dance"]),
-    ("Techno", ["techno"]),
-    ("Trance", ["trance"]),
-    ("House", ["house"]),
-    ("Afro", ["afro", "amapiano", "gqom"]),
-    ("Reggae & Dancehall", ["reggae", "dancehall", "ragga", "dub", "lovers rock"]),
-    ("Latin", ["latin", "reggaeton", "sertanejo", "cumbia", "salsa", "bachata", "merengue"]),
-    ("R&B & Soul", ["r&b", "rnb", "soul"]),
-    ("Hip-Hop", ["hip hop", "rap", "trap", "grime", "drill"]),
-    ("Jazz", ["jazz", "swing"]),
-    ("Folk & Acoustic", ["folk", "acoustic", "singer-songwriter"]),
-    ("Classical", ["classical", "neoclassical", "orchestral", "chamber"]),
-    ("Metal", ["metal"]),
-    ("Rock & Punk", ["rock", "punk"]),
-    ("Indie & Alternative", ["indie", "alternative"]),
-    ("Electronic", ["electro", "edm", "glitch", "idm", "downtempo", "chillout", "ambient", "synth"]),
-    ("Pop", ["pop"]),
-]
-
-
-def bucket_for_genre(genre):
-    g = genre.lower()
-    for bucket_name, keywords in GENRE_BUCKETS:
-        if any(kw in g for kw in keywords):
-            return bucket_name
-    return "Other"
 
 
 def log(msg):
@@ -116,7 +81,7 @@ def load_state():
     if os.path.exists(STATE_PATH):
         with open(STATE_PATH, "r") as f:
             return json.load(f)
-    return {"seen_tracks": {}, "genre_playlists": {}}
+    return {"seen_tracks": {}, "playlist_id": None}
 
 
 def save_state(state):
@@ -227,14 +192,13 @@ def _fetch_artist_new_tracks(sp, artist_id, artist, cutoff):
                 "id": track["id"],
                 "uri": track["uri"],
                 "name": track["name"],
-                "genres": artist.get("genres", []),
             }
     return found
 
 
 def get_new_releases(sp, seed_artists, state):
     cutoff = date.today() - timedelta(days=NEW_RELEASE_LOOKBACK_DAYS)
-    new_tracks = {}  # track_id -> {id, uri, name, genres}
+    new_tracks = {}  # track_id -> {id, uri, name}
     items = list(seed_artists.items())
     checked = 0
 
@@ -262,7 +226,7 @@ def top_genres(seed_artists, limit):
     return [genre for genre, _ in counts.most_common(limit)]
 
 
-def get_genre_discovery_tracks(sp, genres, state, already_found, artist_genre_cache):
+def get_genre_discovery_tracks(sp, genres, state, already_found):
     new_tracks = {}
     for genre in genres:
         try:
@@ -277,23 +241,16 @@ def get_genre_discovery_tracks(sp, genres, state, already_found, artist_genre_ca
             tid = track["id"]
             if tid in state["seen_tracks"] or tid in already_found or tid in new_tracks:
                 continue
-            primary_artist = track["artists"][0]
-            hydrate_genres(sp, [primary_artist["id"]], artist_genre_cache)
-            track_genres = artist_genre_cache.get(primary_artist["id"], {}).get(
-                "genres", [genre]
-            )
             new_tracks[tid] = {
                 "id": tid,
                 "uri": track["uri"],
                 "name": track["name"],
-                "genres": track_genres or [genre],
             }
     return new_tracks
 
 
-def ensure_playlist(sp, user_id, bucket, state):
-    playlist_name = f"{PLAYLIST_NAME_PREFIX}: {bucket}"
-    playlist_id = state["genre_playlists"].get(bucket)
+def ensure_playlist(sp, user_id, state):
+    playlist_id = state.get("playlist_id")
     if playlist_id:
         try:
             sp.playlist(playlist_id, fields="id")
@@ -301,20 +258,20 @@ def ensure_playlist(sp, user_id, bucket, state):
         except spotipy.SpotifyException:
             pass  # playlist was deleted/renamed on Spotify's side; recreate below
 
-    existing = find_playlist_by_name(sp, playlist_name)
+    existing = find_playlist_by_name(sp, PLAYLIST_NAME)
     if existing:
         playlist_id = existing["id"]
     else:
         playlist = sp.user_playlist_create(
             user_id,
-            playlist_name,
+            PLAYLIST_NAME,
             public=False,
             description="Auto-updated by the daily playlist agent. Don't rename this playlist.",
         )
         playlist_id = playlist["id"]
-        log(f'Created playlist "{playlist_name}"')
+        log(f'Created playlist "{PLAYLIST_NAME}"')
 
-    state["genre_playlists"][bucket] = playlist_id
+    state["playlist_id"] = playlist_id
     return playlist_id
 
 
@@ -351,9 +308,7 @@ def main():
     auto_genres = top_genres(seed_artists, MAX_GENRES_FOR_DISCOVERY)
     genres = auto_genres + [g for g in ADDITIONAL_DISCOVERY_GENRES if g not in auto_genres]
     log(f"  searching {len(genres)} genres: {', '.join(genres)}")
-    discovery_tracks = get_genre_discovery_tracks(
-        sp, genres, state, new_release_tracks, seed_artists
-    )
+    discovery_tracks = get_genre_discovery_tracks(sp, genres, state, new_release_tracks)
     log(f"  {len(discovery_tracks)} new tracks from genre discovery")
 
     all_new_tracks = {**new_release_tracks, **discovery_tracks}
@@ -362,20 +317,12 @@ def main():
         save_state(state)
         return
 
-    by_bucket = {}
-    for track in all_new_tracks.values():
-        genres_for_track = track["genres"] or []
-        buckets = {bucket_for_genre(g) for g in genres_for_track} or {"Other"}
-        for bucket in buckets:
-            by_bucket.setdefault(bucket, []).append(track)
+    playlist_id = ensure_playlist(sp, user_id, state)
+    uris = [t["uri"] for t in all_new_tracks.values()]
+    add_tracks_to_playlist(sp, playlist_id, uris)
+    log(f'Added {len(uris)} track(s) to "{PLAYLIST_NAME}"')
 
     today = date.today().isoformat()
-    for bucket, tracks in by_bucket.items():
-        playlist_id = ensure_playlist(sp, user_id, bucket, state)
-        uris = [t["uri"] for t in tracks]
-        add_tracks_to_playlist(sp, playlist_id, uris)
-        log(f'Added {len(uris)} track(s) to "{PLAYLIST_NAME_PREFIX}: {bucket}"')
-
     for track in all_new_tracks.values():
         state["seen_tracks"][track["id"]] = today
 
