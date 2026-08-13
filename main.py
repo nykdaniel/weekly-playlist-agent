@@ -55,6 +55,7 @@ ADDITIONAL_DISCOVERY_GENRES = [
     "hebrew folk",
     "organic downtempo",
     "global bass",
+    "bailefunk",
 ]
 
 
