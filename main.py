@@ -51,7 +51,6 @@ PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
 # hand-picked to broaden discovery beyond what your library already leans toward.
 ADDITIONAL_DISCOVERY_GENRES = [
     "grime",
-    "funk",
     "hebrew folk",
     "organic downtempo",
     "global bass",
