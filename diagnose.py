@@ -1,9 +1,9 @@
 """
 One-off diagnostic (read-only, no changes to Spotify):
 
-1. Cross-checks Spotify's own "Release Radar" playlist against what our
+1. Checks specific example tracks (from Release Radar) against what our
    artist_albums(include_groups="album,single") pull would have found, to
-   see whether we're missing tracks and if so why.
+   see whether we're missing them and if so why.
 2. Reports the genre makeup of your seed artists, and looks up the genre
    of a specific track, to explain any lopsided genre skew in output.
 """
@@ -21,8 +21,12 @@ SCOPES = (
     "playlist-modify-private"
 )
 ECSTATIC_PLAYLIST_NAME = "ecstatic tracks"
-RELEASE_RADAR_NAME = "Release Radar"
-TARGET_TRACK_ID = "6sbM9pwH5brMNFXbCtnpZs"
+GENRE_CHECK_TRACK_ID = "6sbM9pwH5brMNFXbCtnpZs"
+EXAMPLE_TRACK_IDS = [
+    "7DuWvmg3iYUQbFIYcxkVcd",
+    "72tqgaYCgZSBB9KfL2feff",
+    "1fyMlmjbH0JEyKT4qXcxRS",
+]
 
 
 def get_spotify_client():
@@ -82,7 +86,7 @@ def main():
 
     # --- Question 2: genre skew ---
     lines.append("## Question 2: genre skew\n")
-    track = sp.track(TARGET_TRACK_ID)
+    track = sp.track(GENRE_CHECK_TRACK_ID)
     primary_artist = sp.artist(track["artists"][0]["id"])
     lines.append(
         f"Track checked: **{track['name']}** by **{primary_artist['name']}**  \n"
@@ -114,57 +118,43 @@ def main():
     total = len(all_artists)
     lines.append(
         f"\n**{house_count} of {total} seed artists ({house_count / total * 100:.0f}%) "
-        f"have a genre tag containing \"house\".** The new-release scan checks every seed "
-        f"artist equally and doesn't weight by genre, so its output share simply mirrors "
-        f"your seed pool's genre makeup - if most of your seed artists are house-tagged, "
-        f"most new-release output will be too.\n"
+        f"have a genre tag containing \"house\".**\n"
     )
 
-    # --- Question 1: Release Radar cross-check ---
-    lines.append("\n## Question 1: Release Radar cross-check\n")
-    rr = find_playlist_by_name(sp, RELEASE_RADAR_NAME)
-    if not rr:
-        lines.append(f'Could not find a playlist named "{RELEASE_RADAR_NAME}" in your library.\n')
-    else:
-        rr_tracks = get_playlist_tracks(sp, rr["id"])
-        lines.append(f"Release Radar has {len(rr_tracks)} tracks. Checking each one:\n\n")
-
-        counts = {"found": 0, "not_followed": 0, "missing": 0}
-        for t in rr_tracks:
-            primary = t["artists"][0]
-            is_followed = primary["id"] in followed
-            found_in_pull = False
-            if is_followed:
-                try:
-                    albums = sp.artist_albums(
-                        primary["id"], include_groups="album,single", limit=50
-                    )
-                    album_ids = {a["id"] for a in albums["items"]}
-                    found_in_pull = t["album"]["id"] in album_ids
-                except spotipy.SpotifyException:
-                    pass
-
-            if found_in_pull:
-                diagnosis = "OK - would be found by our script"
-                counts["found"] += 1
-            elif not is_followed:
-                diagnosis = "artist is not in your followed list (not a seed artist)"
-                counts["not_followed"] += 1
-            else:
-                diagnosis = (
-                    'MISSING - not in artist_albums(include_groups="album,single") '
-                    "top 50 results - likely a feature/guest appearance "
-                    '(needs "appears_on") or the artist has 50+ releases and this one '
-                    "fell outside that page"
+    # --- Question 1: check specific Release Radar example tracks ---
+    lines.append("\n## Question 1: Release Radar example tracks\n")
+    for tid in EXAMPLE_TRACK_IDS:
+        t = sp.track(tid)
+        primary = t["artists"][0]
+        is_followed = primary["id"] in followed
+        found_in_pull = False
+        found_in_ecstatic = primary["id"] in ecstatic_artist_stubs
+        if is_followed or found_in_ecstatic:
+            try:
+                albums = sp.artist_albums(
+                    primary["id"], include_groups="album,single", limit=50
                 )
-                counts["missing"] += 1
+                album_ids = {a["id"] for a in albums["items"]}
+                found_in_pull = t["album"]["id"] in album_ids
+            except spotipy.SpotifyException:
+                pass
 
-            lines.append(f"- **{t['name']}** by {primary['name']}: {diagnosis}\n")
+        if found_in_pull:
+            diagnosis = "OK - would be found by our script"
+        elif not is_followed and not found_in_ecstatic:
+            diagnosis = "artist is not followed and not in ecstatic tracks (not a seed artist)"
+        else:
+            diagnosis = (
+                'MISSING - not in artist_albums(include_groups="album,single") '
+                "top 50 results - likely a feature/guest appearance "
+                '(needs "appears_on") or the artist has 50+ releases and this one '
+                "fell outside that page, or it's older than it looks"
+            )
 
         lines.append(
-            f"\n**Summary: {counts['found']} would be found, "
-            f"{counts['missing']} are missed by our current logic, "
-            f"{counts['not_followed']} are from artists you don't follow.**\n"
+            f"- **{t['name']}** by {primary['name']} "
+            f"(album group: {t['album']['album_type']}, release date: {t['album']['release_date']}): "
+            f"{diagnosis}\n"
         )
 
     with open(summary_path, "a") as f:
