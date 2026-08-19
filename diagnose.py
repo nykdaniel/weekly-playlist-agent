@@ -1,14 +1,13 @@
 """
 One-off diagnostic (read-only, no changes to Spotify):
 
-1. Checks specific example tracks (from Release Radar) against what our
-   artist_albums(include_groups="album,single") pull would have found, to
-   see whether we're missing them and if so why.
-2. Reports the genre makeup of your seed artists, and looks up the genre
-   of a specific track, to explain any lopsided genre skew in output.
+Checks specific example tracks against seed artist data to see whether
+they're coming from the new-release scan (seed artists) or genre-discovery
+search, and reports how many seed artists are funk-tagged.
 """
 
 import os
+from collections import Counter
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -21,11 +20,11 @@ SCOPES = (
     "playlist-modify-private"
 )
 ECSTATIC_PLAYLIST_NAME = "ecstatic tracks"
-GENRE_CHECK_TRACK_ID = "6sbM9pwH5brMNFXbCtnpZs"
 EXAMPLE_TRACK_IDS = [
-    "7DuWvmg3iYUQbFIYcxkVcd",
-    "72tqgaYCgZSBB9KfL2feff",
-    "1fyMlmjbH0JEyKT4qXcxRS",
+    "73Wt5ggl54NiNxAE9Rtye2",
+    "0Z5JzTCqXK6Z5I6a2cKUWl",
+    "0RiDC2HAe0QWlr2SdAmTDW",
+    "15gQGITHHgbrfHVyJ0ha1d",
 ]
 
 
@@ -84,20 +83,14 @@ def main():
     summary_path = os.environ["GITHUB_STEP_SUMMARY"]
     lines = []
 
-    # --- Question 2: genre skew ---
-    lines.append("## Question 2: genre skew\n")
-    track = sp.track(GENRE_CHECK_TRACK_ID)
-    primary_artist = sp.artist(track["artists"][0]["id"])
-    lines.append(
-        f"Track checked: **{track['name']}** by **{primary_artist['name']}**  \n"
-        f"Artist genres: {', '.join(primary_artist['genres']) or '(none)'}\n"
-    )
-
     followed = get_followed_artists(sp)
     ecstatic_playlist = find_playlist_by_name(sp, ECSTATIC_PLAYLIST_NAME)
     ecstatic_artist_stubs = {}
+    ecstatic_track_count = 0
     if ecstatic_playlist:
-        for t in get_playlist_tracks(sp, ecstatic_playlist["id"]):
+        ecstatic_tracks = get_playlist_tracks(sp, ecstatic_playlist["id"])
+        ecstatic_track_count = len(ecstatic_tracks)
+        for t in ecstatic_tracks:
             for a in t.get("artists", []):
                 ecstatic_artist_stubs[a["id"]] = a
 
@@ -112,50 +105,44 @@ def main():
             if a:
                 all_artists[a["id"]] = a
 
-    house_count = sum(
-        1 for a in all_artists.values() if any("house" in g for g in a.get("genres", []))
-    )
-    total = len(all_artists)
-    lines.append(
-        f"\n**{house_count} of {total} seed artists ({house_count / total * 100:.0f}%) "
-        f"have a genre tag containing \"house\".**\n"
-    )
-
-    # --- Question 1: check specific Release Radar example tracks ---
-    lines.append("\n## Question 1: Release Radar example tracks\n")
+    # --- Which example tracks come from which source ---
+    lines.append("## Example tracks: source check\n")
     for tid in EXAMPLE_TRACK_IDS:
         t = sp.track(tid)
         primary = t["artists"][0]
+        artist_full = all_artists.get(primary["id"])
+        genres = artist_full.get("genres", []) if artist_full else sp.artist(primary["id"]).get("genres", [])
         is_followed = primary["id"] in followed
-        found_in_pull = False
-        found_in_ecstatic = primary["id"] in ecstatic_artist_stubs
-        if is_followed or found_in_ecstatic:
-            try:
-                albums = sp.artist_albums(
-                    primary["id"], include_groups="album,single", limit=50
-                )
-                album_ids = {a["id"] for a in albums["items"]}
-                found_in_pull = t["album"]["id"] in album_ids
-            except spotipy.SpotifyException:
-                pass
-
-        if found_in_pull:
-            diagnosis = "OK - would be found by our script"
-        elif not is_followed and not found_in_ecstatic:
-            diagnosis = "artist is not followed and not in ecstatic tracks (not a seed artist)"
-        else:
-            diagnosis = (
-                'MISSING - not in artist_albums(include_groups="album,single") '
-                "top 50 results - likely a feature/guest appearance "
-                '(needs "appears_on") or the artist has 50+ releases and this one '
-                "fell outside that page, or it's older than it looks"
-            )
-
+        in_ecstatic = primary["id"] in ecstatic_artist_stubs
+        source = []
+        if is_followed:
+            source.append("followed")
+        if in_ecstatic:
+            source.append("in ecstatic tracks")
+        if not source:
+            source.append("NOT a seed artist (would only reach us via genre-discovery search)")
         lines.append(
-            f"- **{t['name']}** by {primary['name']} "
-            f"(album group: {t['album']['album_type']}, release date: {t['album']['release_date']}): "
-            f"{diagnosis}\n"
+            f"- **{t['name']}** by {primary['name']} - genres: {', '.join(genres) or '(none)'} "
+            f"- source: {', '.join(source)}\n"
         )
+
+    # --- Scale of funk representation among seed artists ---
+    funk_artists = [
+        a for a in all_artists.values()
+        if any("funk" in g and "funk rock" not in g for g in a.get("genres", []))
+    ]
+    total = len(all_artists)
+    lines.append(
+        f"\n## Funk representation among seed artists\n\n"
+        f"**{len(funk_artists)} of {total} seed artists ({len(funk_artists) / total * 100:.1f}%) "
+        f"have a genre tag containing \"funk\".**\n\n"
+        f"Your \"ecstatic tracks\" playlist currently has **{ecstatic_track_count} tracks** "
+        f"contributing **{len(ecstatic_artist_stubs)} distinct artists** as seed artists - "
+        f"every one of those is scanned equally for new releases regardless of genre.\n\n"
+        f"Sample of funk-tagged seed artist names and their genres:\n\n"
+    )
+    for a in funk_artists[:25]:
+        lines.append(f"- {a['name']}: {', '.join(a.get('genres', []))}\n")
 
     with open(summary_path, "a") as f:
         f.write("\n".join(lines))
