@@ -20,6 +20,11 @@ DISCOVER_PLAYLIST_NAME = "Discover Daily"
 EXCLUDED_ARTIST_IDS = {
     "3xvaSlT4xsyk6lY1ESOspO",  # Disney
     "4hV3aU0WKvFaiX5ugXP5hp",  # MC MN
+    "4mb1xtQVGSK5dh8AbtwBiR",  # MC Lan
+    "3l4fsEzoeabsET7ddv0lZW",  # Mc Delux
+    "6Vxu4TDCN5TMlRpdu6a2Ag",  # MC K9
+    "7r1L3aZERnrbKkMXUgVRdX",  # Tom Lysar
+    "1APqNiQUA2XpwLEbywSWmZ",  # Tropa da W&S
 }
 
 
