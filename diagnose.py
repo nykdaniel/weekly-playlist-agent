@@ -1,8 +1,8 @@
 """
-One-off diagnostic (read-only, no changes to Spotify): looks up two specific
-artists the user flagged as unwanted, reports their name/genres, whether
-they're a followed artist / in "ecstatic tracks", and how many of their
-tracks are currently sitting in "Discover Daily".
+One-off diagnostic (read-only, no changes to Spotify): looks up five newly
+flagged artists and reports their name/genres, whether they're a followed
+artist / in "ecstatic tracks", and how many of their tracks are currently
+sitting in "Discover Daily".
 """
 
 import os
@@ -20,8 +20,11 @@ SCOPES = (
 ECSTATIC_PLAYLIST_NAME = "ecstatic tracks"
 DISCOVER_PLAYLIST_NAME = "Discover Daily"
 TARGET_ARTIST_IDS = [
-    "3xvaSlT4xsyk6lY1ESOspO",
-    "4hV3aU0WKvFaiX5ugXP5hp",
+    "4mb1xtQVGSK5dh8AbtwBiR",
+    "3l4fsEzoeabsET7ddv0lZW",
+    "6Vxu4TDCN5TMlRpdu6a2Ag",
+    "7r1L3aZERnrbKkMXUgVRdX",
+    "1APqNiQUA2XpwLEbywSWmZ",
 ]
 
 
