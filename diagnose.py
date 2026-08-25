@@ -1,12 +1,11 @@
 """
-One-off diagnostic (read-only, no changes to Spotify): scans the actual
-"Discover Daily" playlist for tracks whose artist name starts with "MC "
-(the classic Brazilian funk naming convention) and reports, for each one,
-its genres and whether it came from a seed artist or genre-discovery search.
+One-off diagnostic (read-only, no changes to Spotify): looks up two specific
+artists the user flagged as unwanted, reports their name/genres, whether
+they're a followed artist / in "ecstatic tracks", and how many of their
+tracks are currently sitting in "Discover Daily".
 """
 
 import os
-import re
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -20,7 +19,10 @@ SCOPES = (
 )
 ECSTATIC_PLAYLIST_NAME = "ecstatic tracks"
 DISCOVER_PLAYLIST_NAME = "Discover Daily"
-MC_PATTERN = re.compile(r"(^|[;,/&]|\bfeat\.?\s|\bft\.?\s)\s*MC[.\s]", re.IGNORECASE)
+TARGET_ARTIST_IDS = [
+    "3xvaSlT4xsyk6lY1ESOspO",
+    "4hV3aU0WKvFaiX5ugXP5hp",
+]
 
 
 def get_spotify_client():
@@ -76,26 +78,7 @@ def get_playlist_tracks(sp, playlist_id):
 def main():
     sp = get_spotify_client()
     summary_path = os.environ["GITHUB_STEP_SUMMARY"]
-    lines = []
-
-    discover = find_playlist_by_name(sp, DISCOVER_PLAYLIST_NAME)
-    if not discover:
-        lines.append(f'Could not find "{DISCOVER_PLAYLIST_NAME}" playlist.\n')
-        with open(summary_path, "a") as f:
-            f.write("\n".join(lines))
-        return
-
-    discover_tracks = get_playlist_tracks(sp, discover["id"])
-    mc_tracks = [
-        t for t in discover_tracks
-        if any(MC_PATTERN.search(f" {a['name']} ") for a in t.get("artists", []))
-    ]
-
-    lines.append(
-        f"## MC-named tracks in Discover Daily\n\n"
-        f"Discover Daily has {len(discover_tracks)} tracks total. "
-        f"{len(mc_tracks)} have an artist matching \"MC ...\".\n\n"
-    )
+    lines = ["## Target artist lookup\n\n"]
 
     followed = get_followed_artists(sp)
     ecstatic_playlist = find_playlist_by_name(sp, ECSTATIC_PLAYLIST_NAME)
@@ -105,11 +88,17 @@ def main():
             for a in t.get("artists", []):
                 ecstatic_artist_ids.add(a["id"])
 
-    for t in mc_tracks:
-        primary = t["artists"][0]
-        artist = sp.artist(primary["id"])
-        is_followed = primary["id"] in followed
-        in_ecstatic = primary["id"] in ecstatic_artist_ids
+    discover = find_playlist_by_name(sp, DISCOVER_PLAYLIST_NAME)
+    discover_tracks = get_playlist_tracks(sp, discover["id"]) if discover else []
+
+    for artist_id in TARGET_ARTIST_IDS:
+        artist = sp.artist(artist_id)
+        is_followed = artist_id in followed
+        in_ecstatic = artist_id in ecstatic_artist_ids
+        matching_tracks = [
+            t for t in discover_tracks
+            if any(a["id"] == artist_id for a in t.get("artists", []))
+        ]
         source = []
         if is_followed:
             source.append("followed")
@@ -117,16 +106,21 @@ def main():
             source.append("in ecstatic tracks")
         if not source:
             source.append("NOT a seed artist -> came from genre-discovery search")
+
         lines.append(
-            f"- **{t['name']}** by {primary['name']} - "
-            f"genres: {', '.join(artist['genres']) or '(none)'} - "
-            f"source: {', '.join(source)}\n"
+            f"### {artist['name']} (`{artist_id}`)\n\n"
+            f"- genres: {', '.join(artist['genres']) or '(none)'}\n"
+            f"- source: {', '.join(source)}\n"
+            f"- tracks currently in Discover Daily: {len(matching_tracks)}\n"
         )
+        for t in matching_tracks:
+            lines.append(f"  - {t['name']}\n")
+        lines.append("\n")
 
     with open(summary_path, "a") as f:
         f.write("\n".join(lines))
 
-    print(f"Found {len(mc_tracks)} MC-named tracks out of {len(discover_tracks)}.")
+    print("Done.")
 
 
 if __name__ == "__main__":
