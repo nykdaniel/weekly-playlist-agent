@@ -54,8 +54,14 @@ ADDITIONAL_DISCOVERY_GENRES = [
     "hebrew folk",
     "organic downtempo",
     "global bass",
-    "bailefunk",
 ]
+
+# Artists never used as seeds and never surfaced via genre discovery, even if
+# they're followed or in "ecstatic tracks" - flagged by the user as unwanted.
+EXCLUDED_ARTIST_IDS = {
+    "3xvaSlT4xsyk6lY1ESOspO",  # Disney
+    "4hV3aU0WKvFaiX5ugXP5hp",  # MC MN
+}
 
 
 def log(msg):
@@ -241,6 +247,8 @@ def get_genre_discovery_tracks(sp, genres, state, already_found):
             tid = track["id"]
             if tid in state["seen_tracks"] or tid in already_found or tid in new_tracks:
                 continue
+            if any(a["id"] in EXCLUDED_ARTIST_IDS for a in track.get("artists", [])):
+                continue
             new_tracks[tid] = {
                 "id": tid,
                 "uri": track["uri"],
@@ -299,6 +307,9 @@ def main():
             continue
         seed_artists[aid] = seed_artists.get(aid, ecstatic_artist_stubs[aid])
     log(f"  {len(ecstatic_artist_stubs)} artists from the playlist ({len(seed_artists)} total seed artists)")
+
+    seed_artists = {aid: a for aid, a in seed_artists.items() if aid not in EXCLUDED_ARTIST_IDS}
+    log(f"  {len(seed_artists)} seed artists after excluding blocked artists")
 
     log("Looking for new releases from seed artists...")
     new_release_tracks = get_new_releases(sp, seed_artists, state)
