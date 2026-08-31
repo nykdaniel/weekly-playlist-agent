@@ -1,8 +1,8 @@
 """
-One-off diagnostic (read-only, no changes to Spotify): looks up five newly
-flagged artists and reports their name/genres, whether they're a followed
-artist / in "ecstatic tracks", and how many of their tracks are currently
-sitting in "Discover Daily".
+One-off diagnostic (read-only, no changes to Spotify): lists every seed
+artist (followed + artists behind "ecstatic tracks") whose genres match the
+funk/phonk family, so the user can see how many artists a genre-based
+filter would actually affect before deciding its scope.
 """
 
 import os
@@ -18,14 +18,7 @@ SCOPES = (
     "playlist-modify-private"
 )
 ECSTATIC_PLAYLIST_NAME = "ecstatic tracks"
-DISCOVER_PLAYLIST_NAME = "Discover Daily"
-TARGET_ARTIST_IDS = [
-    "4mb1xtQVGSK5dh8AbtwBiR",
-    "3l4fsEzoeabsET7ddv0lZW",
-    "6Vxu4TDCN5TMlRpdu6a2Ag",
-    "7r1L3aZERnrbKkMXUgVRdX",
-    "1APqNiQUA2XpwLEbywSWmZ",
-]
+FUNK_GENRE_KEYWORDS = ["funk", "phonk", "sertanejo", "brega", "forr"]
 
 
 def get_spotify_client():
@@ -42,16 +35,6 @@ def get_spotify_client():
     return spotipy.Spotify(auth=token_info["access_token"])
 
 
-def find_playlist_by_name(sp, name):
-    results = sp.current_user_playlists(limit=50)
-    while results:
-        for playlist in results["items"]:
-            if playlist["name"].strip().casefold() == name.casefold():
-                return playlist
-        results = sp.next(results) if results["next"] else None
-    return None
-
-
 def get_followed_artists(sp):
     artists = {}
     results = sp.current_user_followed_artists(limit=50)
@@ -66,64 +49,95 @@ def get_followed_artists(sp):
     return artists
 
 
-def get_playlist_tracks(sp, playlist_id):
-    tracks = []
-    results = sp.playlist_items(playlist_id, additional_types=["track"], limit=100)
+def find_playlist_by_name(sp, name):
+    results = sp.current_user_playlists(limit=50)
+    while results:
+        for playlist in results["items"]:
+            if playlist["name"].strip().casefold() == name.casefold():
+                return playlist
+        results = sp.next(results) if results["next"] else None
+    return None
+
+
+def get_ecstatic_seed_artists(sp):
+    playlist = find_playlist_by_name(sp, ECSTATIC_PLAYLIST_NAME)
+    if not playlist:
+        return {}
+    artist_ids = {}
+    results = sp.playlist_items(playlist["id"], additional_types=["track"], limit=100)
     while results:
         for item in results["items"]:
             track = item.get("track")
-            if track:
-                tracks.append(track)
+            if not track:
+                continue
+            for artist in track.get("artists", []):
+                artist_ids[artist["id"]] = artist
         results = sp.next(results) if results["next"] else None
-    return tracks
+    return artist_ids
+
+
+def hydrate_genres(sp, ids_without_genres, known):
+    missing = [
+        aid
+        for aid in ids_without_genres
+        if aid not in known or "genres" not in known.get(aid, {})
+    ]
+    for i in range(0, len(missing), 50):
+        batch = missing[i : i + 50]
+        for artist in sp.artists(batch)["artists"]:
+            if artist:
+                known[artist["id"]] = artist
+
+
+def is_funk_family(genres):
+    return any(
+        keyword in genre.lower()
+        for genre in genres
+        for keyword in FUNK_GENRE_KEYWORDS
+    )
 
 
 def main():
     sp = get_spotify_client()
-    summary_path = os.environ["GITHUB_STEP_SUMMARY"]
-    lines = ["## Target artist lookup\n\n"]
 
     followed = get_followed_artists(sp)
-    ecstatic_playlist = find_playlist_by_name(sp, ECSTATIC_PLAYLIST_NAME)
-    ecstatic_artist_ids = set()
-    if ecstatic_playlist:
-        for t in get_playlist_tracks(sp, ecstatic_playlist["id"]):
-            for a in t.get("artists", []):
-                ecstatic_artist_ids.add(a["id"])
+    ecstatic_stubs = get_ecstatic_seed_artists(sp)
+    new_ids = [aid for aid in ecstatic_stubs if aid not in followed]
+    hydrate_genres(sp, new_ids, followed)
 
-    discover = find_playlist_by_name(sp, DISCOVER_PLAYLIST_NAME)
-    discover_tracks = get_playlist_tracks(sp, discover["id"]) if discover else []
+    ecstatic_ids = set(ecstatic_stubs.keys())
 
-    for artist_id in TARGET_ARTIST_IDS:
-        artist = sp.artist(artist_id)
-        is_followed = artist_id in followed
-        in_ecstatic = artist_id in ecstatic_artist_ids
-        matching_tracks = [
-            t for t in discover_tracks
-            if any(a["id"] == artist_id for a in t.get("artists", []))
-        ]
-        source = []
-        if is_followed:
-            source.append("followed")
-        if in_ecstatic:
-            source.append("in ecstatic tracks")
-        if not source:
-            source.append("NOT a seed artist -> came from genre-discovery search")
+    seed_artists = dict(followed)
+    for aid in new_ids:
+        seed_artists[aid] = seed_artists.get(aid, ecstatic_stubs[aid])
 
-        lines.append(
-            f"### {artist['name']} (`{artist_id}`)\n\n"
-            f"- genres: {', '.join(artist['genres']) or '(none)'}\n"
-            f"- source: {', '.join(source)}\n"
-            f"- tracks currently in Discover Daily: {len(matching_tracks)}\n"
-        )
-        for t in matching_tracks:
-            lines.append(f"  - {t['name']}\n")
-        lines.append("\n")
+    matches = []
+    for aid, artist in seed_artists.items():
+        genres = artist.get("genres", [])
+        if is_funk_family(genres):
+            source = []
+            if aid in followed:
+                source.append("followed")
+            if aid in ecstatic_ids:
+                source.append("in ecstatic tracks")
+            matches.append((artist["name"], genres, source))
 
+    matches.sort(key=lambda m: m[0].lower())
+
+    summary_path = os.environ["GITHUB_STEP_SUMMARY"]
     with open(summary_path, "a") as f:
-        f.write("\n".join(lines))
+        f.write(
+            f"## Funk/phonk-family artists in your seed pool\n\n"
+            f"{len(seed_artists)} total seed artists. "
+            f"{len(matches)} match funk/phonk/sertanejo/brega/forro genres.\n\n"
+        )
+        for name, genres, source in matches:
+            f.write(
+                f"- **{name}** - genres: {', '.join(genres)} - "
+                f"source: {', '.join(source)}\n"
+            )
 
-    print("Done.")
+    print(f"{len(matches)} funk-family artists out of {len(seed_artists)} seed artists.")
 
 
 if __name__ == "__main__":
