@@ -60,6 +60,15 @@ ADDITIONAL_DISCOVERY_GENRES = [
     "afro house",
 ]
 
+# Record labels to check for new releases, in addition to genres. Spotify's
+# `tag:new` filter doesn't combine with `label:` (it just returns nothing), so
+# unlike genre discovery this searches the label's whole catalog and filters
+# by release date ourselves - same approach as seed-artist new releases.
+DISCOVERY_LABELS = [
+    "Make The Girls Dance Records",
+]
+LABEL_SEARCH_LIMIT = 50  # max allowed by Spotify's search endpoint
+
 # Artists never used as seeds and never surfaced via genre discovery, even if
 # they're followed or in "ecstatic tracks" - flagged by the user as unwanted.
 EXCLUDED_ARTIST_IDS = {
@@ -333,6 +342,61 @@ def get_genre_discovery_tracks(sp, genres, state, already_found):
     return new_tracks
 
 
+def get_label_discovery_tracks(sp, labels, state, already_found):
+    """New tracks from specific record labels. Unlike genre search, Spotify's
+    `label:` filter doesn't combine with `tag:new` (it returns nothing), so
+    this pulls each label's recent catalog and filters by release date
+    ourselves, the same way seed-artist new releases are found."""
+    cutoff = date.today() - timedelta(days=NEW_RELEASE_LOOKBACK_DAYS)
+    new_tracks = {}
+    artist_genre_cache = {}
+
+    for label in labels:
+        try:
+            results = sp.search(
+                q=f'label:"{label}"', type="track", limit=LABEL_SEARCH_LIMIT
+            )
+        except spotipy.SpotifyException as e:
+            log(f'WARNING: search failed for label "{label}": {e}')
+            continue
+
+        candidates = []
+        for track in results["tracks"]["items"]:
+            tid = track["id"]
+            if tid in state["seen_tracks"] or tid in already_found or tid in new_tracks:
+                continue
+            release_date = track.get("album", {}).get("release_date")
+            if not release_date or parse_release_date(release_date) < cutoff:
+                continue
+            primary_artists = track.get("artists", [])
+            if not primary_artists:
+                continue
+            primary = primary_artists[0]
+            if primary["id"] in EXCLUDED_ARTIST_IDS:
+                continue
+            candidates.append((tid, track, primary))
+
+        missing_ids = [
+            c[2]["id"] for c in candidates if c[2]["id"] not in artist_genre_cache
+        ]
+        for i in range(0, len(missing_ids), 50):
+            batch = missing_ids[i : i + 50]
+            for artist in sp.artists(batch)["artists"]:
+                if artist:
+                    artist_genre_cache[artist["id"]] = artist.get("genres", [])
+
+        for tid, track, primary in candidates:
+            if has_excluded_genre(artist_genre_cache.get(primary["id"], [])):
+                continue
+            new_tracks[tid] = {
+                "id": tid,
+                "uri": track["uri"],
+                "name": track["name"],
+                "artist_id": primary["id"],
+            }
+    return new_tracks
+
+
 def dedupe_variants(tracks):
     """Collapse remix/slowed/sped-up duplicates of the same song by the same artist."""
     seen_keys = set()
@@ -415,7 +479,12 @@ def main():
     discovery_tracks = get_genre_discovery_tracks(sp, genres, state, new_release_tracks)
     log(f"  {len(discovery_tracks)} new tracks from genre discovery")
 
-    all_new_tracks = {**new_release_tracks, **discovery_tracks}
+    log(f"Looking for new releases on {len(DISCOVERY_LABELS)} labels...")
+    already_found_before_labels = {**new_release_tracks, **discovery_tracks}
+    label_tracks = get_label_discovery_tracks(sp, DISCOVERY_LABELS, state, already_found_before_labels)
+    log(f"  {len(label_tracks)} new tracks from label discovery")
+
+    all_new_tracks = {**new_release_tracks, **discovery_tracks, **label_tracks}
     before_dedupe = len(all_new_tracks)
     all_new_tracks = dedupe_variants(all_new_tracks)
     if before_dedupe != len(all_new_tracks):
