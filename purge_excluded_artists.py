@@ -1,7 +1,8 @@
 """
-One-off cleanup: removes tracks by the newly-excluded artists (Disney, MC MN)
-from the existing "Discover Daily" playlist. Only removes those specific
-tracks - does not touch anything else in the playlist.
+One-off cleanup: removes tracks by explicitly-excluded artists AND tracks
+whose primary artist carries a Brazilian funk/phonk-family genre tag, from
+the existing "Discover Daily" playlist. Only removes those specific tracks -
+does not touch anything else in the playlist.
 """
 
 import os
@@ -25,6 +26,23 @@ EXCLUDED_ARTIST_IDS = {
     "6Vxu4TDCN5TMlRpdu6a2Ag",  # MC K9
     "7r1L3aZERnrbKkMXUgVRdX",  # Tom Lysar
     "1APqNiQUA2XpwLEbywSWmZ",  # Tropa da W&S
+}
+
+# Exact genre tags (NOT substrings - "liquid funk"/"uk funky"/"funky house"/"g-funk"
+# are unrelated genres and must never match).
+BRAZILIAN_FUNK_GENRES = {
+    "brazilian funk",
+    "brazilian phonk",
+    "funk carioca",
+    "funk bruxaria",
+    "brega funk",
+    "funk consciente",
+    "funk de bh",
+    "funk pop",
+    "trap funk",
+    "brazilian trap",
+    "sertanejo universitário",
+    "sertanejo",
 }
 
 
@@ -64,10 +82,14 @@ def get_playlist_tracks(sp, playlist_id):
     return tracks
 
 
+def has_excluded_genre(genres):
+    return any(g in BRAZILIAN_FUNK_GENRES for g in genres)
+
+
 def main():
     sp = get_spotify_client()
     summary_path = os.environ["GITHUB_STEP_SUMMARY"]
-    lines = ["## Purge excluded artists from Discover Daily\n\n"]
+    lines = ["## Purge excluded artists/genres from Discover Daily\n\n"]
 
     playlist = find_playlist_by_name(sp, DISCOVER_PLAYLIST_NAME)
     if not playlist:
@@ -77,16 +99,47 @@ def main():
         return
 
     tracks = get_playlist_tracks(sp, playlist["id"])
-    to_remove_uris = [
-        t["uri"]
-        for t in tracks
-        if any(a["id"] in EXCLUDED_ARTIST_IDS for a in t.get("artists", []))
-    ]
+
+    # Batch-fetch genres for every primary artist in the playlist once.
+    primary_artist_ids = sorted({
+        t["artists"][0]["id"] for t in tracks if t.get("artists")
+    })
+    artist_genres = {}
+    for i in range(0, len(primary_artist_ids), 50):
+        batch = primary_artist_ids[i : i + 50]
+        for artist in sp.artists(batch)["artists"]:
+            if artist:
+                artist_genres[artist["id"]] = artist.get("genres", [])
+
+    by_artist_id = []
+    by_genre = []
+    for t in tracks:
+        if not t.get("artists"):
+            continue
+        primary_id = t["artists"][0]["id"]
+        if primary_id in EXCLUDED_ARTIST_IDS:
+            by_artist_id.append(t)
+        elif has_excluded_genre(artist_genres.get(primary_id, [])):
+            by_genre.append(t)
+
+    to_remove = by_artist_id + by_genre
+    to_remove_uris = [t["uri"] for t in to_remove]
 
     lines.append(
         f"Playlist had {len(tracks)} tracks. "
-        f"Removing {len(to_remove_uris)} tracks by excluded artists.\n\n"
+        f"Removing {len(to_remove_uris)} tracks "
+        f"({len(by_artist_id)} by explicitly excluded artists, "
+        f"{len(by_genre)} by Brazilian funk/phonk genre tag).\n\n"
     )
+    if by_genre:
+        lines.append("### Removed via genre match\n\n")
+        seen_names = set()
+        for t in by_genre:
+            name = t["artists"][0]["name"]
+            if name not in seen_names:
+                seen_names.add(name)
+                lines.append(f"- {name}\n")
+        lines.append("\n")
 
     if to_remove_uris:
         for i in range(0, len(to_remove_uris), 100):
