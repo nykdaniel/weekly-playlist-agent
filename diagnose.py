@@ -1,14 +1,13 @@
 """
-One-off diagnostic (read-only, no changes to Spotify): given a playlist the
-user says is curated by a specific record label, looks at the tracks'
-actual Spotify "label" metadata (from each track's album) to find the exact
-label string as registered on Spotify, then tests whether Spotify's
-`label:"X" tag:new` search filter actually returns anything for it - before
-wiring a new label into the daily discovery pipeline.
+One-off diagnostic (read-only, no changes to Spotify): tests several
+variants of Spotify's `label:` search filter for "Make The Girls Dance
+Records" to figure out why `label:"X" tag:new` returned zero results, and
+whether searching without tag:new (then filtering by release date
+ourselves, like we already do for seed artists) is a better approach.
 """
 
 import os
-from collections import Counter
+from datetime import date, timedelta
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -21,10 +20,7 @@ SCOPES = (
     "playlist-modify-private"
 )
 
-# playlist_id -> what the user called it
-TARGET_PLAYLISTS = {
-    "4GGqmAHV52sOymfg9bEkQR": "Make The Girls Dance",
-}
+LABEL = "Make The Girls Dance Records"
 
 
 def get_spotify_client():
@@ -41,78 +37,64 @@ def get_spotify_client():
     return spotipy.Spotify(auth=token_info["access_token"])
 
 
-def get_playlist_tracks(sp, playlist_id, limit=100):
-    tracks = []
-    results = sp.playlist_items(playlist_id, additional_types=["track"], limit=100)
-    while results and len(tracks) < limit:
-        for item in results["items"]:
-            track = item.get("track")
-            if track:
-                tracks.append(track)
-        results = sp.next(results) if results["next"] else None
-    return tracks[:limit]
+def try_search(sp, q, type_="track", limit=20):
+    try:
+        results = sp.search(q=q, type=type_, limit=limit)
+        key = type_ + "s"
+        items = results[key]["items"]
+        return items, None
+    except spotipy.SpotifyException as e:
+        return None, str(e)
 
 
 def main():
     sp = get_spotify_client()
     summary_path = os.environ["GITHUB_STEP_SUMMARY"]
-    lines = ["## Label discovery check\n\n"]
+    lines = ["## Label search variants\n\n"]
 
-    for playlist_id, user_label_name in TARGET_PLAYLISTS.items():
-        try:
-            playlist = sp.playlist(
-                playlist_id, fields="name,description,owner,tracks.total"
-            )
-        except spotipy.SpotifyException as e:
-            lines.append(f"### Could not open playlist `{playlist_id}`: {e}\n\n")
+    queries = [
+        (f'label:"{LABEL}" tag:new', "track"),
+        (f'label:"{LABEL}"', "track"),
+        (f'label:"{LABEL}"', "album"),
+        (f"label:{LABEL}", "track"),
+        (f'label:"make the girls dance records"', "track"),
+    ]
+
+    for q, type_ in queries:
+        items, err = try_search(sp, q, type_=type_, limit=20)
+        if err:
+            lines.append(f"- `{q}` (type={type_}) -> ERROR: {err}\n")
             continue
+        lines.append(f"- `{q}` (type={type_}) -> {len(items)} results\n")
+        for item in items[:5]:
+            if type_ == "track":
+                artists = ", ".join(a["name"] for a in item["artists"])
+                rd = item.get("album", {}).get("release_date", "?")
+                lines.append(f"  - {item['name']} by {artists} (released {rd})\n")
+            else:
+                artists = ", ".join(a["name"] for a in item["artists"])
+                lines.append(f"  - {item['name']} by {artists} (released {item.get('release_date', '?')})\n")
 
-        lines.append(
-            f"### Playlist: {playlist['name']} (`{playlist_id}`)\n\n"
-            f"- called by user: \"{user_label_name}\"\n"
-            f"- owner: {playlist['owner']['display_name']}\n"
-            f"- description: {playlist.get('description') or '(none)'}\n"
-            f"- total tracks: {playlist['tracks']['total']}\n\n"
-        )
-
-        tracks = get_playlist_tracks(sp, playlist_id, limit=50)
-        album_ids = list({t["album"]["id"] for t in tracks if t.get("album")})
-
-        label_counts = Counter()
-        for i in range(0, len(album_ids), 20):
-            batch = album_ids[i : i + 20]
-            for album in sp.albums(batch)["albums"]:
-                if album and album.get("label"):
-                    label_counts[album["label"]] += 1
-
-        lines.append(
-            f"Sampled {len(tracks)} tracks / {len(album_ids)} albums. "
-            f"Label field values found:\n\n"
-        )
-        for label, count in label_counts.most_common():
-            lines.append(f"- `{label}` - {count} albums\n")
-        lines.append("\n")
-
-        top_label = label_counts.most_common(1)
-        if top_label:
-            label_name, _ = top_label[0]
+    # Also: how many of the label's albums, found via plain label search,
+    # fall inside our normal 14-day new-release lookback window?
+    lines.append("\n### Release-date check (last 14 days) via plain label search, type=album\n\n")
+    albums, err = try_search(sp, f'label:"{LABEL}"', type_="album", limit=50)
+    if err:
+        lines.append(f"ERROR: {err}\n")
+    else:
+        cutoff = date.today() - timedelta(days=14)
+        lines.append(f"{len(albums)} albums returned total.\n\n")
+        for a in albums:
+            rd = a.get("release_date", "")
             try:
-                results = sp.search(
-                    q=f'label:"{label_name}" tag:new', type="track", limit=20
-                )
-                found = results["tracks"]["items"]
-            except spotipy.SpotifyException as e:
-                lines.append(f"Search test for `label:\"{label_name}\"` failed: {e}\n\n")
-                found = None
-
-            if found is not None:
-                lines.append(
-                    f'`label:"{label_name}" tag:new` search returns {len(found)} tracks:\n\n'
-                )
-                for t in found[:10]:
-                    artist_names = ", ".join(a["name"] for a in t["artists"])
-                    lines.append(f"  - {t['name']} by {artist_names}\n")
-                lines.append("\n")
+                parts = rd.split("-")
+                y, m, d = int(parts[0]), int(parts[1]) if len(parts) > 1 else 1, int(parts[2]) if len(parts) > 2 else 1
+                rd_date = date(y, m, d)
+                is_new = rd_date >= cutoff
+            except Exception:
+                is_new = False
+            flag = "NEW" if is_new else ""
+            lines.append(f"- {a['name']} - released {rd} {flag}\n")
 
     with open(summary_path, "a") as f:
         f.write("\n".join(lines))
