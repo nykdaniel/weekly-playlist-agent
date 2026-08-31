@@ -19,6 +19,7 @@ and don't spam the playlist with duplicates.
 
 import json
 import os
+import re
 import sys
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -40,8 +41,9 @@ STATE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state.jso
 
 NEW_RELEASE_LOOKBACK_DAYS = 14  # how far back to consider an artist's release "new"
 STATE_PRUNE_DAYS = 180          # forget seen-track history older than this
-MAX_GENRES_FOR_DISCOVERY = 12   # cap search calls for genre-based discovery
-GENRE_SEARCH_LIMIT = 20         # tracks pulled per genre search
+MAX_GENRES_FOR_DISCOVERY = 12   # cap search calls for auto-detected genre discovery
+GENRE_SEARCH_LIMIT = 20         # tracks pulled per auto-detected genre search
+CURATED_GENRE_SEARCH_LIMIT = 30 # tracks pulled per hand-picked genre search (given more weight)
 PLAYLIST_NAME = "Discover Daily"
 ARTIST_FETCH_WORKERS = 10       # concurrent requests when checking artists for new releases
 PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
@@ -54,6 +56,8 @@ ADDITIONAL_DISCOVERY_GENRES = [
     "hebrew folk",
     "organic downtempo",
     "global bass",
+    "latin house",
+    "afro house",
 ]
 
 # Artists never used as seeds and never surfaced via genre discovery, even if
@@ -67,6 +71,36 @@ EXCLUDED_ARTIST_IDS = {
     "7r1L3aZERnrbKkMXUgVRdX",  # Tom Lysar
     "1APqNiQUA2XpwLEbywSWmZ",  # Tropa da W&S
 }
+
+# Exact genre tags (NOT substrings - "liquid funk", "uk funky", "funky house" and
+# "g-funk" are unrelated genres and must never match) that flag Brazilian
+# funk/phonk-family content. Any seed artist or discovered track carrying one of
+# these gets excluded, regardless of which artist it's by - this is what actually
+# stops the flood, instead of naming artists one at a time forever.
+BRAZILIAN_FUNK_GENRES = {
+    "brazilian funk",
+    "brazilian phonk",
+    "funk carioca",
+    "funk bruxaria",
+    "brega funk",
+    "funk consciente",
+    "funk de bh",
+    "funk pop",
+    "trap funk",
+    "brazilian trap",
+    "sertanejo universitário",
+    "sertanejo",
+}
+
+# Suffixes that mark a near-duplicate remix/edit of a track we may already have
+# ("Song X - Slowed", "Song X (Sped Up)", ...) - stripped so we don't add five
+# versions of the same song as if they were five different new tracks.
+VARIANT_SUFFIX_RE = re.compile(
+    r"\s*[-(\[]\s*(slowed(\s*\+?\s*reverb)?|super\s*slowed|ultra\s*slowed|sped\s*up|"
+    r"speed\s*up|nightcore|remix|extended|radio\s*edit|acoustic|instrumental|"
+    r"clean|explicit|edit|version)\s*[)\]]?\s*$",
+    re.IGNORECASE,
+)
 
 
 def log(msg):
@@ -119,6 +153,18 @@ def parse_release_date(release_date):
         return date(year, month, day)
     except ValueError:
         return date(year, month, 1)
+
+
+def has_excluded_genre(genres):
+    return any(g in BRAZILIAN_FUNK_GENRES for g in genres)
+
+
+def normalize_title(name):
+    prev = None
+    while prev != name:
+        prev = name
+        name = VARIANT_SUFFIX_RE.sub("", name).strip()
+    return name.lower()
 
 
 def get_followed_artists(sp):
@@ -203,13 +249,14 @@ def _fetch_artist_new_tracks(sp, artist_id, artist, cutoff):
                 "id": track["id"],
                 "uri": track["uri"],
                 "name": track["name"],
+                "artist_id": artist_id,
             }
     return found
 
 
 def get_new_releases(sp, seed_artists, state):
     cutoff = date.today() - timedelta(days=NEW_RELEASE_LOOKBACK_DAYS)
-    new_tracks = {}  # track_id -> {id, uri, name}
+    new_tracks = {}  # track_id -> {id, uri, name, artist_id}
     items = list(seed_artists.items())
     checked = 0
 
@@ -239,27 +286,64 @@ def top_genres(seed_artists, limit):
 
 def get_genre_discovery_tracks(sp, genres, state, already_found):
     new_tracks = {}
+    artist_genre_cache = {}
+    curated = set(ADDITIONAL_DISCOVERY_GENRES)
+
     for genre in genres:
+        limit = CURATED_GENRE_SEARCH_LIMIT if genre in curated else GENRE_SEARCH_LIMIT
         try:
             results = sp.search(
-                q=f'genre:"{genre}" tag:new', type="track", limit=GENRE_SEARCH_LIMIT
+                q=f'genre:"{genre}" tag:new', type="track", limit=limit
             )
         except spotipy.SpotifyException as e:
             log(f'WARNING: search failed for genre "{genre}": {e}')
             continue
 
+        candidates = []
         for track in results["tracks"]["items"]:
             tid = track["id"]
             if tid in state["seen_tracks"] or tid in already_found or tid in new_tracks:
                 continue
-            if any(a["id"] in EXCLUDED_ARTIST_IDS for a in track.get("artists", [])):
+            primary_artists = track.get("artists", [])
+            if not primary_artists:
+                continue
+            primary = primary_artists[0]
+            if primary["id"] in EXCLUDED_ARTIST_IDS:
+                continue
+            candidates.append((tid, track, primary))
+
+        missing_ids = [
+            c[2]["id"] for c in candidates if c[2]["id"] not in artist_genre_cache
+        ]
+        for i in range(0, len(missing_ids), 50):
+            batch = missing_ids[i : i + 50]
+            for artist in sp.artists(batch)["artists"]:
+                if artist:
+                    artist_genre_cache[artist["id"]] = artist.get("genres", [])
+
+        for tid, track, primary in candidates:
+            if has_excluded_genre(artist_genre_cache.get(primary["id"], [])):
                 continue
             new_tracks[tid] = {
                 "id": tid,
                 "uri": track["uri"],
                 "name": track["name"],
+                "artist_id": primary["id"],
             }
     return new_tracks
+
+
+def dedupe_variants(tracks):
+    """Collapse remix/slowed/sped-up duplicates of the same song by the same artist."""
+    seen_keys = set()
+    result = {}
+    for tid, track in tracks.items():
+        key = (track.get("artist_id"), normalize_title(track["name"]))
+        if key in seen_keys:
+            continue
+        seen_keys.add(key)
+        result[tid] = track
+    return result
 
 
 def ensure_playlist(sp, user_id, state):
@@ -313,8 +397,12 @@ def main():
         seed_artists[aid] = seed_artists.get(aid, ecstatic_artist_stubs[aid])
     log(f"  {len(ecstatic_artist_stubs)} artists from the playlist ({len(seed_artists)} total seed artists)")
 
-    seed_artists = {aid: a for aid, a in seed_artists.items() if aid not in EXCLUDED_ARTIST_IDS}
-    log(f"  {len(seed_artists)} seed artists after excluding blocked artists")
+    seed_artists = {
+        aid: a
+        for aid, a in seed_artists.items()
+        if aid not in EXCLUDED_ARTIST_IDS and not has_excluded_genre(a.get("genres", []))
+    }
+    log(f"  {len(seed_artists)} seed artists after excluding blocked artists/genres")
 
     log("Looking for new releases from seed artists...")
     new_release_tracks = get_new_releases(sp, seed_artists, state)
@@ -328,6 +416,11 @@ def main():
     log(f"  {len(discovery_tracks)} new tracks from genre discovery")
 
     all_new_tracks = {**new_release_tracks, **discovery_tracks}
+    before_dedupe = len(all_new_tracks)
+    all_new_tracks = dedupe_variants(all_new_tracks)
+    if before_dedupe != len(all_new_tracks):
+        log(f"  collapsed {before_dedupe - len(all_new_tracks)} remix/slowed/sped-up duplicates")
+
     if not all_new_tracks:
         log("Nothing new today.")
         save_state(state)
