@@ -25,8 +25,13 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta
 
+import requests
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+
+# Transient network/API errors (timeouts, connection resets, occasional 5xx)
+# that shouldn't take down the whole run - just that one artist/genre/label.
+TRANSIENT_ERRORS = (spotipy.SpotifyException, requests.exceptions.RequestException)
 
 SCOPES = (
     "user-follow-read "
@@ -47,6 +52,7 @@ CURATED_GENRE_SEARCH_LIMIT = 30 # tracks pulled per hand-picked genre search (gi
 PLAYLIST_NAME = "Discover Daily"
 ARTIST_FETCH_WORKERS = 10       # concurrent requests when checking artists for new releases
 PROGRESS_LOG_INTERVAL = 200     # log a progress line every N artists checked
+SPOTIFY_REQUEST_TIMEOUT = 15    # seconds - spotipy's default (5s) is too tight under load
 
 # Always searched for new tracks in addition to your auto-detected top genres,
 # regardless of how little (or no) presence they have among your seed artists -
@@ -128,7 +134,11 @@ def get_spotify_client():
         scope=SCOPES,
     )
     token_info = auth_manager.refresh_access_token(refresh_token)
-    return spotipy.Spotify(auth=token_info["access_token"])
+    return spotipy.Spotify(
+        auth=token_info["access_token"],
+        requests_timeout=SPOTIFY_REQUEST_TIMEOUT,
+        retries=3,
+    )
 
 
 def load_state():
@@ -231,7 +241,12 @@ def hydrate_genres(sp, artists_without_genres, known_artists):
     ]
     for i in range(0, len(missing_ids), 50):
         batch = missing_ids[i : i + 50]
-        for artist in sp.artists(batch)["artists"]:
+        try:
+            fetched = sp.artists(batch)["artists"]
+        except TRANSIENT_ERRORS as e:
+            log(f"WARNING: could not fetch a batch of artist details: {e}")
+            continue
+        for artist in fetched:
             if artist:
                 known_artists[artist["id"]] = artist
 
@@ -240,7 +255,7 @@ def _fetch_artist_new_tracks(sp, artist_id, artist, cutoff):
     found = {}
     try:
         albums = sp.artist_albums(artist_id, include_groups="album,single", limit=50)
-    except spotipy.SpotifyException as e:
+    except TRANSIENT_ERRORS as e:
         log(f'WARNING: could not fetch albums for artist "{artist.get("name")}": {e}')
         return found
 
@@ -250,7 +265,7 @@ def _fetch_artist_new_tracks(sp, artist_id, artist, cutoff):
     for album in recent_albums:
         try:
             tracks = sp.album_tracks(album["id"], limit=50)
-        except spotipy.SpotifyException as e:
+        except TRANSIENT_ERRORS as e:
             log(f'WARNING: could not fetch tracks for album "{album["name"]}": {e}')
             continue
         for track in tracks["items"]:
@@ -304,7 +319,7 @@ def get_genre_discovery_tracks(sp, genres, state, already_found):
             results = sp.search(
                 q=f'genre:"{genre}" tag:new', type="track", limit=limit
             )
-        except spotipy.SpotifyException as e:
+        except TRANSIENT_ERRORS as e:
             log(f'WARNING: search failed for genre "{genre}": {e}')
             continue
 
@@ -326,7 +341,12 @@ def get_genre_discovery_tracks(sp, genres, state, already_found):
         ]
         for i in range(0, len(missing_ids), 50):
             batch = missing_ids[i : i + 50]
-            for artist in sp.artists(batch)["artists"]:
+            try:
+                fetched = sp.artists(batch)["artists"]
+            except TRANSIENT_ERRORS as e:
+                log(f'WARNING: could not fetch artist details for genre "{genre}": {e}')
+                continue
+            for artist in fetched:
                 if artist:
                     artist_genre_cache[artist["id"]] = artist.get("genres", [])
 
@@ -356,7 +376,7 @@ def get_label_discovery_tracks(sp, labels, state, already_found):
             results = sp.search(
                 q=f'label:"{label}"', type="track", limit=LABEL_SEARCH_LIMIT
             )
-        except spotipy.SpotifyException as e:
+        except TRANSIENT_ERRORS as e:
             log(f'WARNING: search failed for label "{label}": {e}')
             continue
 
@@ -381,7 +401,12 @@ def get_label_discovery_tracks(sp, labels, state, already_found):
         ]
         for i in range(0, len(missing_ids), 50):
             batch = missing_ids[i : i + 50]
-            for artist in sp.artists(batch)["artists"]:
+            try:
+                fetched = sp.artists(batch)["artists"]
+            except TRANSIENT_ERRORS as e:
+                log(f'WARNING: could not fetch artist details for label "{label}": {e}')
+                continue
+            for artist in fetched:
                 if artist:
                     artist_genre_cache[artist["id"]] = artist.get("genres", [])
 
