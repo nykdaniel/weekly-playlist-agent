@@ -45,7 +45,10 @@ ECSTATIC_PLAYLIST_NAME = "ecstatic tracks"
 STATE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state.json")
 
 NEW_RELEASE_LOOKBACK_DAYS = 14  # how far back to consider an artist's release "new"
-STATE_PRUNE_DAYS = 180          # forget seen-track history older than this
+PLAYLIST_TRACK_TTL_DAYS = 14    # remove a track from Discover Daily this many days after adding it
+STATE_PRUNE_DAYS = 180          # forget seen-track history older than this (longer than the
+                                 # playlist TTL on purpose, so a removed track doesn't just get
+                                 # re-added the next time it turns up in a discovery search)
 MAX_GENRES_FOR_DISCOVERY = 12   # cap search calls for auto-detected genre discovery
 GENRE_SEARCH_LIMIT = 20         # tracks pulled per auto-detected genre search
 CURATED_GENRE_SEARCH_LIMIT = 30 # tracks pulled per hand-picked genre search (given more weight)
@@ -466,6 +469,30 @@ def add_tracks_to_playlist(sp, playlist_id, uris):
         sp.playlist_add_items(playlist_id, uris[i : i + 100])
 
 
+def remove_expired_tracks(sp, playlist_id, state):
+    """Remove tracks that have been sitting in Discover Daily for
+    PLAYLIST_TRACK_TTL_DAYS+ days, based on the date we added them
+    (state["seen_tracks"]), so the playlist is a rolling window instead of
+    growing forever. Track IDs stay in seen_tracks regardless (see
+    STATE_PRUNE_DAYS) so a removed track doesn't just get re-added next time
+    it resurfaces in a discovery search."""
+    cutoff = (date.today() - timedelta(days=PLAYLIST_TRACK_TTL_DAYS)).isoformat()
+    expired_ids = [
+        tid for tid, seen_date in state["seen_tracks"].items() if seen_date <= cutoff
+    ]
+    if not expired_ids:
+        return 0
+
+    uris = [f"spotify:track:{tid}" for tid in expired_ids]
+    for i in range(0, len(uris), 100):
+        batch = uris[i : i + 100]
+        try:
+            sp.playlist_remove_all_occurrences_of_items(playlist_id, batch)
+        except TRANSIENT_ERRORS as e:
+            log(f"WARNING: could not remove a batch of expired tracks: {e}")
+    return len(expired_ids)
+
+
 def main():
     sp = get_spotify_client()
     user_id = sp.current_user()["id"]
@@ -515,19 +542,22 @@ def main():
     if before_dedupe != len(all_new_tracks):
         log(f"  collapsed {before_dedupe - len(all_new_tracks)} remix/slowed/sped-up duplicates")
 
-    if not all_new_tracks:
-        log("Nothing new today.")
-        save_state(state)
-        return
-
     playlist_id = ensure_playlist(sp, user_id, state)
-    uris = [t["uri"] for t in all_new_tracks.values()]
-    add_tracks_to_playlist(sp, playlist_id, uris)
-    log(f'Added {len(uris)} track(s) to "{PLAYLIST_NAME}"')
 
-    today = date.today().isoformat()
-    for track in all_new_tracks.values():
-        state["seen_tracks"][track["id"]] = today
+    if all_new_tracks:
+        uris = [t["uri"] for t in all_new_tracks.values()]
+        add_tracks_to_playlist(sp, playlist_id, uris)
+        log(f'Added {len(uris)} track(s) to "{PLAYLIST_NAME}"')
+
+        today = date.today().isoformat()
+        for track in all_new_tracks.values():
+            state["seen_tracks"][track["id"]] = today
+    else:
+        log("Nothing new today.")
+
+    removed = remove_expired_tracks(sp, playlist_id, state)
+    if removed:
+        log(f'Removed {removed} track(s) that had been in "{PLAYLIST_NAME}" for {PLAYLIST_TRACK_TTL_DAYS}+ days')
 
     save_state(state)
     log("Done.")
