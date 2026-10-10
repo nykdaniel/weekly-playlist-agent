@@ -27,6 +27,7 @@ from datetime import date, datetime, timedelta
 
 import requests
 import spotipy
+from spotipy.cache_handler import MemoryCacheHandler
 from spotipy.oauth2 import SpotifyOAuth
 
 # Transient network/API errors (timeouts, connection resets, occasional 5xx)
@@ -106,7 +107,7 @@ BRAZILIAN_FUNK_GENRES = {
     "funk pop",
     "trap funk",
     "brazilian trap",
-    "sertanejo universitário",
+    "sertanejo universit√°rio",
     "sertanejo",
 }
 
@@ -137,8 +138,19 @@ def get_spotify_client():
         scope=SCOPES,
     )
     token_info = auth_manager.refresh_access_token(refresh_token)
+
+    # Access tokens last 1 hour and Spotify throttling can push a run past that,
+    # so hand spotipy an auth manager (seeded with the token we just fetched)
+    # that refreshes the token itself whenever it's about to expire.
+    auth_manager = SpotifyOAuth(
+        client_id=client_id,
+        client_secret=client_secret,
+        redirect_uri="http://127.0.0.1:8080/callback",
+        scope=SCOPES,
+        cache_handler=MemoryCacheHandler(token_info=token_info),
+    )
     return spotipy.Spotify(
-        auth=token_info["access_token"],
+        auth_manager=auth_manager,
         requests_timeout=SPOTIFY_REQUEST_TIMEOUT,
         retries=3,
     )
@@ -444,8 +456,12 @@ def ensure_playlist(sp, user_id, state):
         try:
             sp.playlist(playlist_id, fields="id")
             return playlist_id
-        except spotipy.SpotifyException:
-            pass  # playlist was deleted/renamed on Spotify's side; recreate below
+        except spotipy.SpotifyException as e:
+            if e.http_status not in (400, 403, 404):
+                return playlist_id  # throttled/expired/5xx - the playlist itself is fine
+            # playlist was deleted/renamed on Spotify's side; recreate below
+        except requests.exceptions.RequestException:
+            return playlist_id
 
     existing = find_playlist_by_name(sp, PLAYLIST_NAME)
     if existing:
@@ -469,28 +485,59 @@ def add_tracks_to_playlist(sp, playlist_id, uris):
         sp.playlist_add_items(playlist_id, uris[i : i + 100])
 
 
+def get_playlist_track_ids(sp, playlist_id):
+    """IDs of every track currently in the playlist, or None if it couldn't be read."""
+    ids = set()
+    try:
+        results = sp.playlist_items(
+            playlist_id,
+            fields="items(track(id)),next",
+            additional_types=["track"],
+            limit=100,
+        )
+        while results:
+            for item in results["items"]:
+                track = item.get("track")
+                if track and track.get("id"):
+                    ids.add(track["id"])
+            results = sp.next(results) if results["next"] else None
+    except TRANSIENT_ERRORS as e:
+        log(f"WARNING: could not read {PLAYLIST_NAME} to find expired tracks: {e}")
+        return None
+    return ids
+
+
 def remove_expired_tracks(sp, playlist_id, state):
     """Remove tracks that have been sitting in Discover Daily for
     PLAYLIST_TRACK_TTL_DAYS+ days, based on the date we added them
     (state["seen_tracks"]), so the playlist is a rolling window instead of
-    growing forever. Track IDs stay in seen_tracks regardless (see
-    STATE_PRUNE_DAYS) so a removed track doesn't just get re-added next time
-    it resurfaces in a discovery search."""
+    growing forever. Only tracks actually still in the playlist are sent for
+    removal. Track IDs stay in seen_tracks regardless (see STATE_PRUNE_DAYS)
+    so a removed track doesn't just get re-added next time it resurfaces in a
+    discovery search."""
     cutoff = (date.today() - timedelta(days=PLAYLIST_TRACK_TTL_DAYS)).isoformat()
+    in_playlist = get_playlist_track_ids(sp, playlist_id)
+    if not in_playlist:
+        return 0
+
     expired_ids = [
-        tid for tid, seen_date in state["seen_tracks"].items() if seen_date <= cutoff
+        tid
+        for tid in in_playlist
+        if tid in state["seen_tracks"] and state["seen_tracks"][tid] <= cutoff
     ]
     if not expired_ids:
         return 0
 
     uris = [f"spotify:track:{tid}" for tid in expired_ids]
+    removed = 0
     for i in range(0, len(uris), 100):
         batch = uris[i : i + 100]
         try:
             sp.playlist_remove_all_occurrences_of_items(playlist_id, batch)
+            removed += len(batch)
         except TRANSIENT_ERRORS as e:
             log(f"WARNING: could not remove a batch of expired tracks: {e}")
-    return len(expired_ids)
+    return removed
 
 
 def main():
