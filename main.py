@@ -107,7 +107,7 @@ BRAZILIAN_FUNK_GENRES = {
     "funk pop",
     "trap funk",
     "brazilian trap",
-    "sertanejo universit√°rio",
+    "sertanejo universitário",
     "sertanejo",
 }
 
