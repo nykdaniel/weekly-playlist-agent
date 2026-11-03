@@ -1,0 +1,547 @@
+{
+ "added": {
+  "bkyatra": {
+   "date": "2026-11-03",
+   "lane": "ethnic-house",
+   "name": "BK YATRA",
+   "sources": [
+    "bandcamp:ethnic-house"
+   ],
+   "uris": [
+    "spotify:track:2bW7h2bj8ExRlQGsBaOfti",
+    "spotify:track:46cSeCqxnUgId5P2kAt8jJ",
+    "spotify:track:3dy0Ul0toIGFW1pkxqEqbe"
+   ]
+  },
+  "cadik": {
+   "date": "2026-11-03",
+   "lane": "dubstep",
+   "name": "Cadik",
+   "sources": [
+    "bandcamp:140",
+    "bandcamp:dubstep"
+   ],
+   "uris": [
+    "spotify:track:6mGRZUDmtMI9LpE4vwlDpR",
+    "spotify:track:4oXBE7zKzfhc6NChBzFgKn",
+    "spotify:track:46lpDxMeRiItzafSi8RYM9"
+   ]
+  },
+  "calmstiege": {
+   "date": "2026-11-03",
+   "lane": "global-bass",
+   "name": "Calm Stiege",
+   "sources": [
+    "bandcamp:global-bass"
+   ],
+   "uris": [
+    "spotify:track:5Ns0SD1Mr0U5UrixoUCZr7",
+    "spotify:track:1YnhQjAuWjyDIFuPMdautY",
+    "spotify:track:6SKIy4RHtm5TIttu8SGnem"
+   ]
+  },
+  "cartridge": {
+   "date": "2026-11-03",
+   "lane": "grime",
+   "name": "Cartridge",
+   "sources": [
+    "bandcamp:grime",
+    "bandcamp:instrumental-grime"
+   ],
+   "uris": [
+    "spotify:track:4GegMYgiMl8eTyoszITDgL",
+    "spotify:track:4kJ7qrygxW0trA73yWjUan",
+    "spotify:track:0eLO92ksyIfcrzXNaHORTo"
+   ]
+  },
+  "conjuntomedialuna": {
+   "date": "2026-11-03",
+   "lane": "global-bass",
+   "name": "Conjunto Media Luna",
+   "sources": [
+    "bandcamp:global-bass",
+    "bandcamp:tropical-bass"
+   ],
+   "uris": [
+    "spotify:track:2tmZnOHNUrGHw6qRpIQ3W3",
+    "spotify:track:73VnQ6P563jSbnwcrsYyr6",
+    "spotify:track:4H4gh7gm2bqjkd46YWK3Yf"
+   ]
+  },
+  "djsprinter": {
+   "date": "2026-11-03",
+   "lane": "grime",
+   "name": "DJ Sprinter",
+   "sources": [
+    "bandcamp:grime"
+   ],
+   "uris": [
+    "spotify:track:51kkw9EgxD8DXbb5fYTV8m",
+    "spotify:track:3VLPc9pvEFJnEp2S4HAV7N",
+    "spotify:track:6KTj1tlQOFfC3vwcvhixJw"
+   ]
+  },
+  "elextravagante": {
+   "date": "2026-11-03",
+   "lane": "global-bass",
+   "name": "El Extravagante",
+   "sources": [
+    "bandcamp:tropical-bass"
+   ],
+   "uris": [
+    "spotify:track:5nc7hYPxJyyv6l9eGJ2wAG",
+    "spotify:track:2r9MFZBMDFPRXDMiXNks57",
+    "spotify:track:5NmoNu41d67kM2PUSIQBC0"
+   ]
+  },
+  "hitpoint": {
+   "date": "2026-11-03",
+   "lane": "grime",
+   "name": "HITPOINT",
+   "sources": [
+    "bandcamp:grime-instrumentals",
+    "bandcamp:instrumental-grime"
+   ],
+   "uris": [
+    "spotify:track:2nptsKgW7Sp4sPEpawtD7T",
+    "spotify:track:0AgNmVDt7Rgqh1a0ADHlGF"
+   ]
+  },
+  "jackessek": {
+   "date": "2026-11-03",
+   "lane": "ethnic-house",
+   "name": "Jack Essek",
+   "sources": [
+    "bandcamp:ethnic-house"
+   ],
+   "uris": [
+    "spotify:track:0iLpLgfvu2ODUPwShQAFki",
+    "spotify:track:5oFpBp61sNeUAxlx7PvzBK",
+    "spotify:track:35hJEXoXDoZ4VTle4hrtdV"
+   ]
+  },
+  "jkenzo": {
+   "date": "2026-11-03",
+   "lane": "dubstep",
+   "name": "J:Kenzo",
+   "sources": [
+    "bandcamp:dubstep",
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:3GakeyWQJbWZc0s0PMGght",
+    "spotify:track:4Iaiyn2gjVH2kX3YQVGdSE",
+    "spotify:track:4dDUGzPZifKdH97ecN9V9W"
+   ]
+  },
+  "joehard": {
+   "date": "2026-11-03",
+   "lane": "ethnic-house",
+   "name": "Joe Hard",
+   "sources": [
+    "bandcamp:afro-house",
+    "bandcamp:tribal-house"
+   ],
+   "uris": [
+    "spotify:track:05inxAo4F4ntOnLNiwbIa1",
+    "spotify:track:4PLhMFyHVVO6f1vrVuMdIT",
+    "spotify:track:6PHbLlcgstMYeW2SuzC9Dd"
+   ]
+  },
+  "kercha": {
+   "date": "2026-11-03",
+   "lane": "dubstep",
+   "name": "Kercha",
+   "sources": [
+    "bandcamp:deep-dubstep",
+    "bandcamp:dubstep"
+   ],
+   "uris": [
+    "spotify:track:5cSFfjdH5D5uoHoKaI5cPA",
+    "spotify:track:6XJnXIWX3W570H0oQRNn64",
+    "spotify:track:0ditj4UCIxQfRKpYCEqpHr"
+   ]
+  },
+  "m4xw311": {
+   "date": "2026-11-03",
+   "lane": "grime",
+   "name": "M4XW311",
+   "sources": [
+    "bandcamp:grime-instrumentals",
+    "bandcamp:instrumental-grime"
+   ],
+   "uris": [
+    "spotify:track:3Lk9oxB9ZQn4XwUrYeLyEF",
+    "spotify:track:3x2XQPwo1fshbikU8WITXx",
+    "spotify:track:2PstCdqaYWRi26Gx9Cg4XG"
+   ]
+  },
+  "nickam": {
+   "date": "2026-11-03",
+   "lane": "ethnic-house",
+   "name": "Nick AM",
+   "sources": [
+    "bandcamp:ethnic-house"
+   ],
+   "uris": [
+    "spotify:track:3l9GKWODE71BQ7tbryExT3",
+    "spotify:track:1q2gMfKoTNGg9ROoOWrdFy",
+    "spotify:track:6wCaXVrhTsHjRfJPFWKjl9"
+   ]
+  },
+  "owlybeats": {
+   "date": "2026-11-03",
+   "lane": "grime",
+   "name": "Owlybeats",
+   "sources": [
+    "bandcamp:instrumental-grime"
+   ],
+   "uris": [
+    "spotify:track:32vFs48DizPLVxRuGSxvQJ",
+    "spotify:track:41400wLPPWmXPQ1lQyHQr0"
+   ]
+  },
+  "peverelist": {
+   "date": "2026-11-03",
+   "lane": "dubstep",
+   "name": "Peverelist",
+   "sources": [
+    "bandcamp:deep-dubstep",
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1DxvkBAExfcsgq8H916RUL",
+    "spotify:track:3QqxEpfkokVu14P1I5Eent",
+    "spotify:track:5hJeOlYSxi02W5mMeNDrLP"
+   ]
+  },
+  "playroots": {
+   "date": "2026-11-03",
+   "lane": "ethnic-house",
+   "name": "Playroots",
+   "sources": [
+    "bandcamp:ethnic-house"
+   ],
+   "uris": [
+    "spotify:track:6aoGeoe9p5g6URGB5zz77q",
+    "spotify:track:6h3sYKxPo7tmvTDrtZaycs",
+    "spotify:track:2P2QnMPaLv4iiXjOzgj14K"
+   ]
+  },
+  "ricorica": {
+   "date": "2026-11-03",
+   "lane": "global-bass",
+   "name": "RICO RICA",
+   "sources": [
+    "bandcamp:global-bass"
+   ],
+   "uris": [
+    "spotify:track:1InHe6mBnNLbVpstasj9fg",
+    "spotify:track:36Oi00IQcaUjIE7upVy4v5",
+    "spotify:track:6r7JTYZrT9VkRhkmxhRetE"
+   ]
+  },
+  "soulbassproject": {
+   "date": "2026-11-03",
+   "lane": "dubstep",
+   "name": "Soul Bass Project",
+   "sources": [
+    "bandcamp:deep-dubstep",
+    "bandcamp:dubstep"
+   ],
+   "uris": [
+    "spotify:track:00Zq30CBV0T1WJxRCYa1EK",
+    "spotify:track:7ED0oezKPMGBAnKcTj5Ajn",
+    "spotify:track:641EPa1pZiUJVvqINVaLed"
+   ]
+  },
+  "woxow": {
+   "date": "2026-11-03",
+   "lane": "global-bass",
+   "name": "Woxow",
+   "sources": [
+    "bandcamp:global-bass"
+   ],
+   "uris": [
+    "spotify:track:4F3BS83f0zm4PNx5LQD0nr",
+    "spotify:track:3UPy0RamruXdKpD8eqToZB",
+    "spotify:track:3knfuSZXSoJWycOiwKN4qL"
+   ]
+  }
+ },
+ "mbid": {
+  "aeromanyelo": "18ae128c-7043-48d9-b45e-c60caf1975d3",
+  "ahmedspins": "d6d516c2-e439-4f8a-a2eb-3cbe5a1af92a",
+  "benga": "d3ba1c50-d403-40df-8eac-80d74551a7e3",
+  "blackcoffee": "7fa03932-cd68-498f-aa4f-d4a6a2ce6071",
+  "caiiro": "3bfdf3f3-98a8-47f3-a49e-b969ea8bd6d8",
+  "chanchaviacircuito": "22c82e36-c32c-4206-8a49-6d350cce992f",
+  "coki": "a9bfea30-6c6b-418a-84d6-b92ce2d85b92",
+  "commodo": "9c70d239-0b23-4237-be05-655c53d3af60",
+  "culoedesong": "23c1b0a0-f9d0-43fc-b823-2bbbbae6f24c",
+  "dacapo": "f99df2aa-5222-4487-9cba-5b88d25ad7d0",
+  "denguedenguedengue": "545cbad6-d916-4fe4-8290-53f83ad3ce09",
+  "digitalmystikz": "2c1583ab-3bfa-41b9-b849-4d4b5d891339",
+  "distance": "472bc127-8861-45e8-bc9e-31e8dd32de7a",
+  "djmarfox": "408a8848-3b4b-49ae-8733-cfaebca74fdc",
+  "elbuho": "0981102f-a51b-474e-849e-3756fe1fef64",
+  "enoonapa": "a686b033-b500-476d-bbdf-7f9ec25d4abd",
+  "fazemiyake": "10988d87-dd00-41ee-8a00-fda631a9fdc0",
+  "flowdan": "58998667-6dba-4436-a94c-b3ca20cd4234",
+  "footsie": "54ec1a54-81de-4589-aee4-d25c1fc93a76",
+  "frikstailers": "bbc2932e-c806-4ef3-b162-503701ce5284",
+  "ghettokumbe": "c336a046-4d90-4ca0-ac37-876a800cf2ba",
+  "hyenah": "c86a34d7-975f-43a1-9186-1cd53b9870ad",
+  "jammer": "1d6e8676-3b7f-4e39-9aa3-0b0af45479c8",
+  "kahn": "b55cfdd7-1e18-4aa1-8632-58cdbb44637a",
+  "kode9": "e95a9d7f-fc26-4e56-8032-90cd954deea0",
+  "kususa": "628b5bb4-4aa0-4816-9899-d7888cde1397",
+  "loefah": "35d4519c-e1b8-4131-810f-042bb2ec748f",
+  "nidia": "f276dca5-1abe-4701-89e1-79dc76949678",
+  "novelist": "2c889972-702b-4926-9624-0c5c4ef2b35e",
+  "pinch": "0b70e909-b5cc-48fc-96c2-f34ee642878d",
+  "sabo": "6202d2ac-1b90-4764-9d91-c0ba6d3bab2b",
+  "shackleton": "6b9b48d9-e409-41a2-b007-e58521e17fc5",
+  "shimza": "f632cf5a-422c-4cda-861d-59045ae59a8b",
+  "silkie": "70c76e1c-539f-4d38-86dd-b79a3d949899",
+  "skream": "fb5ee67e-e31a-40cf-8b06-5f1a0f53529a",
+  "systemasolar": "aa895e35-e7c5-446b-9f62-26b27ea5b8a2",
+  "terrordanjah": "22257e35-b26d-4555-927e-e56a2ccdbde9",
+  "tribilinsound": "7bde4442-ee03-4b96-81e4-d7c2146f3a69",
+  "uprootandy": "a5badd8b-54a6-48c3-bd72-24977023e536",
+  "visionist": "951ee33f-98e0-4beb-bc9b-2ecce4d71530",
+  "wiley": "d0f61299-9caa-4e6b-8b10-2839de120b27"
+ },
+ "playlist_ids": {
+  "dubstep": "22b4KlpJHPKbQGNb4MvoOU",
+  "ethnic-house": "2TaS5vH3e9iNXDzKy1fZUF",
+  "global-bass": "2sZJxOu2sMQU6468lWg0QE",
+  "grime": "0Zama9jTgJ9ll6U6sVAfGK"
+ },
+ "promoted": {},
+ "rejected": {},
+ "runs": [
+  {
+   "added": 20,
+   "date": "2026-11-03"
+  }
+ ],
+ "tag_cursor": {
+  "dubstep": 3,
+  "ethnic-house": 3,
+  "global-bass": 3,
+  "grime": 3
+ },
+ "unsure": {
+  "amambay100000": {
+   "date": "2026-11-03",
+   "name": "A  M  A  M  B  A  Y    1 0 0  0 0 0",
+   "why": "no exact-name artist on Spotify"
+  },
+  "antilogic": {
+   "date": "2026-11-03",
+   "name": "Antilogic",
+   "why": "no genre tags and no release-name match"
+  },
+  "auralbalm": {
+   "date": "2026-11-03",
+   "name": "AuralBalm",
+   "why": "no exact-name artist on Spotify"
+  },
+  "bombaestereo": {
+   "date": "2026-11-03",
+   "name": "Bomba Estéreo",
+   "why": "already mainstream (follower cap)"
+  },
+  "burial": {
+   "date": "2026-11-03",
+   "name": "Burial",
+   "why": "already mainstream (follower cap)"
+  },
+  "djtimok": {
+   "date": "2026-11-03",
+   "name": "DjTimok",
+   "why": "no exact-name artist on Spotify"
+  },
+  "djtools": {
+   "date": "2026-11-03",
+   "name": "DJ Tools",
+   "why": "no tracks found"
+  },
+  "djtx": {
+   "date": "2026-11-03",
+   "name": "djtx",
+   "why": "no genre tags and no release-name match"
+  },
+  "dreadsender": {
+   "date": "2026-11-03",
+   "name": "Dreadsender",
+   "why": "no genre tags and no release-name match"
+  },
+  "fargas": {
+   "date": "2026-11-03",
+   "name": "Fargas",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "fatimaalqadiri": {
+   "date": "2026-11-03",
+   "name": "Fatima Al Qadiri",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "flyingbuff": {
+   "date": "2026-11-03",
+   "name": "Flying Buff",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "fourtwentysound": {
+   "date": "2026-11-03",
+   "name": "Fourtwenty Sound",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "jimineedles": {
+   "date": "2026-11-03",
+   "name": "Jimi Needles",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "jsee": {
+   "date": "2026-11-03",
+   "name": "J See",
+   "why": "no exact-name artist on Spotify"
+  },
+  "lecea": {
+   "date": "2026-11-03",
+   "name": "Lecea",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "lestr": {
+   "date": "2026-11-03",
+   "name": "LESTR",
+   "why": "no exact-name artist on Spotify"
+  },
+  "lumprecords": {
+   "date": "2026-11-03",
+   "name": "Lump Records",
+   "why": "no tracks found"
+  },
+  "maniac": {
+   "date": "2026-11-03",
+   "name": "Maniac",
+   "why": "no exact-name artist on Spotify"
+  },
+  "mesotron": {
+   "date": "2026-11-03",
+   "name": "Mesotron",
+   "why": "quality: only 89 followers"
+  },
+  "moodedits": {
+   "date": "2026-11-03",
+   "name": "Mood Edits",
+   "why": "no exact-name artist on Spotify"
+  },
+  "neekeetone": {
+   "date": "2026-11-03",
+   "name": "Neekeetone",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "neonbeats": {
+   "date": "2026-11-03",
+   "name": "Neon Beats",
+   "why": "quality: only 56 followers"
+  },
+  "padthaisoundsystem": {
+   "date": "2026-11-03",
+   "name": "Pad Thai Soundsystem",
+   "why": "no genre tags and no release-name match"
+  },
+  "pmusicstore": {
+   "date": "2026-11-03",
+   "name": "P Music Store",
+   "why": "no exact-name artist on Spotify"
+  },
+  "pocho": {
+   "date": "2026-11-03",
+   "name": "Pocho",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "premiumluxurysuushmitaxbrooklynshanti": {
+   "date": "2026-11-03",
+   "name": "Premium Luxury (Suushmita x Brooklyn Shanti)",
+   "why": "no exact-name artist on Spotify"
+  },
+  "princerapid": {
+   "date": "2026-11-03",
+   "name": "Prince Rapid",
+   "why": "quality: last release 2021"
+  },
+  "qechuaboi": {
+   "date": "2026-11-03",
+   "name": "Qechuaboi",
+   "why": "quality: only 74 followers"
+  },
+  "romeosantos": {
+   "date": "2026-11-03",
+   "name": "Romeo Santos",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "rythmebrise": {
+   "date": "2026-11-03",
+   "name": "Rythme Brisé",
+   "why": "no genre tags and no release-name match"
+  },
+  "siliconesoul": {
+   "date": "2026-11-03",
+   "name": "Silicone Soul",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "skream": {
+   "date": "2026-11-03",
+   "name": "Skream",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "smogo": {
+   "date": "2026-11-03",
+   "name": "Smogo",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "souljudas": {
+   "date": "2026-11-03",
+   "name": "Soul Judas",
+   "why": "quality: only 4 followers"
+  },
+  "sunka": {
+   "date": "2026-11-03",
+   "name": "sunka",
+   "why": "no tracks found"
+  },
+  "sureal": {
+   "date": "2026-11-03",
+   "name": "Su Real",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "tenshu": {
+   "date": "2026-11-03",
+   "name": "Tenshu",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "va": {
+   "date": "2026-11-03",
+   "name": "VA",
+   "why": "no exact-name artist on Spotify"
+  },
+  "variousartists": {
+   "date": "2026-11-03",
+   "name": "Various Artists",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "variscan": {
+   "date": "2026-11-03",
+   "name": "Variscan",
+   "why": "no genre tags and no release-name match"
+  },
+  "vond": {
+   "date": "2026-11-03",
+   "name": "Von D",
+   "why": "no exact-name artist on Spotify"
+  }
+ }
+}
