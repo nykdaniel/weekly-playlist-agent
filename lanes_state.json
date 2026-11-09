@@ -1,5 +1,31 @@
 {
  "added": {
+  "appleblim": {
+   "date": "2026-11-09",
+   "lane": "dubstep",
+   "name": "Appleblim",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:7HwCY7v9SN0RqGrNGZCryG",
+    "spotify:track:1qAJMuKXfVIGsYAxC2HqHf",
+    "spotify:track:5vnNGfR4E6wiS6UKUm4wbk"
+   ]
+  },
+  "azola": {
+   "date": "2026-11-09",
+   "lane": "ethnic-house",
+   "name": "Azola",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:6REbbKoksIc127eDJxz8GC",
+    "spotify:track:3Cq7CXWdXX47pOqBqi7340",
+    "spotify:track:13f5sXSKq5naJABmUlSsr1"
+   ]
+  },
   "bkyatra": {
    "date": "2026-11-03",
    "lane": "ethnic-house",
@@ -11,6 +37,19 @@
     "spotify:track:2bW7h2bj8ExRlQGsBaOfti",
     "spotify:track:46cSeCqxnUgId5P2kAt8jJ",
     "spotify:track:3dy0Ul0toIGFW1pkxqEqbe"
+   ]
+  },
+  "boxcutter": {
+   "date": "2026-11-09",
+   "lane": "dubstep",
+   "name": "Boxcutter",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1eswbjGILFJCYsyOst8V7J",
+    "spotify:track:09XIEDA0Pc4ZPtKx8hfqxY",
+    "spotify:track:5TKHXDLEBKUrZq75EP7Fim"
    ]
   },
   "cadik": {
@@ -68,6 +107,45 @@
     "spotify:track:4H4gh7gm2bqjkd46YWK3Yf"
    ]
   },
+  "deltatron": {
+   "date": "2026-11-09",
+   "lane": "global-bass",
+   "name": "Deltatron",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:4NrqWhB0BVwyPB6mUMdBJR",
+    "spotify:track:3mkj0bQP1uCSKIJCfqtDmw",
+    "spotify:track:1ZDahtUhK2d2qP8lxlhYBw"
+   ]
+  },
+  "djlycox": {
+   "date": "2026-11-09",
+   "lane": "global-bass",
+   "name": "DJ Lycox",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:7bHzNhe6J4ZKl4Qk91YSlx",
+    "spotify:track:20kQ7FogWaIg7DkcaLa4kR",
+    "spotify:track:1FKtArawThv4MwAxpeO3pF"
+   ]
+  },
+  "djniggafox": {
+   "date": "2026-11-09",
+   "lane": "global-bass",
+   "name": "DJ Nigga Fox",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:3rh298WaFIBW9HLQCwAd8O",
+    "spotify:track:5dkcXkDIjzOktqoq8NY5in",
+    "spotify:track:3VqMKDADX0IyUuz7HwBACY"
+   ]
+  },
   "djsprinter": {
    "date": "2026-11-03",
    "lane": "grime",
@@ -94,6 +172,45 @@
     "spotify:track:5NmoNu41d67kM2PUSIQBC0"
    ]
   },
+  "elremolon": {
+   "date": "2026-11-09",
+   "lane": "global-bass",
+   "name": "El Remolón",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1raIlTDNVTnIUzs6M0cOCT",
+    "spotify:track:1OiEdS4FTTJlMMplNKHomb",
+    "spotify:track:6tSdo6xgGwQjWMBJYn9kat"
+   ]
+  },
+  "frisco": {
+   "date": "2026-11-09",
+   "lane": "grime",
+   "name": "Frisco",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:3jzfiKtkueyzmvWVelVwtk",
+    "spotify:track:2Vo4v0z35aGBQ5uSyfiE2k",
+    "spotify:track:14ggV3vXZCY4iI3Empi7GC"
+   ]
+  },
+  "gothtrad": {
+   "date": "2026-11-09",
+   "lane": "dubstep",
+   "name": "Goth-Trad",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:6vh150U2lr8UzRx098OSGc",
+    "spotify:track:0FnaZWJgBpObO0SsIiy3Cb",
+    "spotify:track:2kFySm9rcZJAX3Y6j18mMF"
+   ]
+  },
   "hitpoint": {
    "date": "2026-11-03",
    "lane": "grime",
@@ -105,6 +222,32 @@
    "uris": [
     "spotify:track:2nptsKgW7Sp4sPEpawtD7T",
     "spotify:track:0AgNmVDt7Rgqh1a0ADHlGF"
+   ]
+  },
+  "ikonika": {
+   "date": "2026-11-09",
+   "lane": "grime",
+   "name": "Ikonika",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1Hbb6tVaf4yC3D5rLJ03dA",
+    "spotify:track:7fCV6SSZYhOvOQ9RvEfISk",
+    "spotify:track:5sB8PctFSym55NlSdHhJfR"
+   ]
+  },
+  "italtek": {
+   "date": "2026-11-09",
+   "lane": "dubstep",
+   "name": "Ital Tek",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:28fw5agVCVceIiuWlnph2q",
+    "spotify:track:0mQhPlIrU3niIg5OvR9DBE",
+    "spotify:track:3T8t6Kyq3U5iUKKD8Z98jA"
    ]
   },
   "jackessek": {
@@ -162,6 +305,19 @@
     "spotify:track:0ditj4UCIxQfRKpYCEqpHr"
    ]
   },
+  "kode9": {
+   "date": "2026-11-09",
+   "lane": "grime",
+   "name": "Kode9",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:3DbnN46WGF1ib0pBPvtQVC",
+    "spotify:track:5wVjkuLg5DdnN5UNU40rEi",
+    "spotify:track:2soKew0rpCUSWz3wxXue2w"
+   ]
+  },
   "m4xw311": {
    "date": "2026-11-03",
    "lane": "grime",
@@ -174,6 +330,19 @@
     "spotify:track:3Lk9oxB9ZQn4XwUrYeLyEF",
     "spotify:track:3x2XQPwo1fshbikU8WITXx",
     "spotify:track:2PstCdqaYWRi26Gx9Cg4XG"
+   ]
+  },
+  "mikongo": {
+   "date": "2026-11-09",
+   "lane": "global-bass",
+   "name": "Mikongo",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:6edZ6jH5Yh8VCdktQl8g7I",
+    "spotify:track:1D2PIloPRUPyd3GGQcY4of",
+    "spotify:track:5jgIvOwvPzumlL4RIuG8ql"
    ]
   },
   "nickam": {
@@ -241,6 +410,18 @@
     "spotify:track:6r7JTYZrT9VkRhkmxhRetE"
    ]
   },
+  "scuba": {
+   "date": "2026-11-09",
+   "lane": "dubstep",
+   "name": "Scuba",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:4P3GXzriZn12k9exRqn6ki",
+    "spotify:track:6fTiFBQJ520YNPBXDBP2SU"
+   ]
+  },
   "soulbassproject": {
    "date": "2026-11-03",
    "lane": "dubstep",
@@ -253,6 +434,30 @@
     "spotify:track:00Zq30CBV0T1WJxRCYa1EK",
     "spotify:track:7ED0oezKPMGBAnKcTj5Ajn",
     "spotify:track:641EPa1pZiUJVvqINVaLed"
+   ]
+  },
+  "swindle": {
+   "date": "2026-11-09",
+   "lane": "grime",
+   "name": "Swindle",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1ariuOyi3j3x9wxf7Y6Fbc"
+   ]
+  },
+  "thebug": {
+   "date": "2026-11-09",
+   "lane": "grime",
+   "name": "The Bug",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:2hbtmXvGX0pLVuzjK3oTtf",
+    "spotify:track:7k9XruEHhkEH1I2epEHERo",
+    "spotify:track:3gxYWXhsiy9Yy3FBiOxoxN"
    ]
   },
   "woxow": {
@@ -318,25 +523,45 @@
   "global-bass": "2sZJxOu2sMQU6468lWg0QE",
   "grime": "0Zama9jTgJ9ll6U6sVAfGK"
  },
- "promoted": {},
+ "promoted": {
+  "calmstiege": {
+   "date": "2026-11-09",
+   "lane": "global-bass",
+   "name": "Calm Stiege"
+  },
+  "nickam": {
+   "date": "2026-11-09",
+   "lane": "ethnic-house",
+   "name": "Nick AM"
+  }
+ },
  "rejected": {},
  "runs": [
   {
    "added": 20,
    "date": "2026-11-03"
+  },
+  {
+   "added": 16,
+   "date": "2026-11-09"
   }
  ],
  "tag_cursor": {
-  "dubstep": 3,
-  "ethnic-house": 3,
-  "global-bass": 3,
-  "grime": 3
+  "dubstep": 0,
+  "ethnic-house": 6,
+  "global-bass": 6,
+  "grime": 0
  },
  "unsure": {
   "amambay100000": {
    "date": "2026-11-03",
    "name": "A  M  A  M  B  A  Y    1 0 0  0 0 0",
    "why": "no exact-name artist on Spotify"
+  },
+  "annemarie": {
+   "date": "2026-11-09",
+   "name": "Anne‐Marie",
+   "why": "same-name artist(s) with unrelated genres"
   },
   "antilogic": {
    "date": "2026-11-03",
@@ -348,6 +573,21 @@
    "name": "AuralBalm",
    "why": "no exact-name artist on Spotify"
   },
+  "avamax": {
+   "date": "2026-11-09",
+   "name": "Ava Max",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "avicii": {
+   "date": "2026-11-09",
+   "name": "Avicii",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "benwatt": {
+   "date": "2026-11-09",
+   "name": "Ben Watt",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "bombaestereo": {
    "date": "2026-11-03",
    "name": "Bomba Estéreo",
@@ -357,6 +597,41 @@
    "date": "2026-11-03",
    "name": "Burial",
    "why": "already mainstream (follower cap)"
+  },
+  "calvinharris": {
+   "date": "2026-11-09",
+   "name": "Calvin Harris",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "caspa": {
+   "date": "2026-11-09",
+   "name": "Caspa",
+   "why": "no tracks found"
+  },
+  "charlottegainsbourg": {
+   "date": "2026-11-09",
+   "name": "Charlotte Gainsbourg",
+   "why": "already mainstream (follower cap)"
+  },
+  "closermusik": {
+   "date": "2026-11-09",
+   "name": "Closer Musik",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "d1": {
+   "date": "2026-11-09",
+   "name": "D1",
+   "why": "no exact-name artist on Spotify"
+  },
+  "disclosure": {
+   "date": "2026-11-09",
+   "name": "Disclosure",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "djolifox": {
+   "date": "2026-11-09",
+   "name": "DJ Olifox",
+   "why": "no genre tags and no release-name match"
   },
   "djtimok": {
    "date": "2026-11-03",
@@ -373,6 +648,11 @@
    "name": "djtx",
    "why": "no genre tags and no release-name match"
   },
+  "drake": {
+   "date": "2026-11-09",
+   "name": "Drake",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "dreadsender": {
    "date": "2026-11-03",
    "name": "Dreadsender",
@@ -388,6 +668,16 @@
    "name": "Fatima Al Qadiri",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "fauna": {
+   "date": "2026-11-09",
+   "name": "Fauna",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "fisher": {
+   "date": "2026-11-09",
+   "name": "FISHER",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "flyingbuff": {
    "date": "2026-11-03",
    "name": "Flying Buff",
@@ -398,15 +688,45 @@
    "name": "Fourtwenty Sound",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "jackback": {
+   "date": "2026-11-09",
+   "name": "Jack Back",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "jimineedles": {
    "date": "2026-11-03",
    "name": "Jimi Needles",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "jozzy": {
+   "date": "2026-11-09",
+   "name": "Jozzy",
    "why": "same-name artist(s) with unrelated genres"
   },
   "jsee": {
    "date": "2026-11-03",
    "name": "J See",
    "why": "no exact-name artist on Spotify"
+  },
+  "justinbieber": {
+   "date": "2026-11-09",
+   "name": "Justin Bieber",
+   "why": "already mainstream (follower cap)"
+  },
+  "kingcoya": {
+   "date": "2026-11-09",
+   "name": "King Coya",
+   "why": "quality: last release 2022"
+  },
+  "kinkyjustice": {
+   "date": "2026-11-09",
+   "name": "Kinky Justice",
+   "why": "no exact-name artist on Spotify"
+  },
+  "kygo": {
+   "date": "2026-11-09",
+   "name": "Kygo",
+   "why": "same-name artist(s) with unrelated genres"
   },
   "lecea": {
    "date": "2026-11-03",
@@ -418,6 +738,16 @@
    "name": "LESTR",
    "why": "no exact-name artist on Spotify"
   },
+  "lorde": {
+   "date": "2026-11-09",
+   "name": "Lorde",
+   "why": "already mainstream (follower cap)"
+  },
+  "loschapillacs": {
+   "date": "2026-11-09",
+   "name": "Los Chapillacs",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "lumprecords": {
    "date": "2026-11-03",
    "name": "Lump Records",
@@ -428,15 +758,40 @@
    "name": "Maniac",
    "why": "no exact-name artist on Spotify"
   },
+  "melanie": {
+   "date": "2026-11-09",
+   "name": "Melanie",
+   "why": "no tracks found"
+  },
   "mesotron": {
    "date": "2026-11-03",
    "name": "Mesotron",
    "why": "quality: only 89 followers"
   },
+  "modestep": {
+   "date": "2026-11-09",
+   "name": "Modestep",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "mondlingcobo": {
+   "date": "2026-11-09",
+   "name": "Mondli Ngcobo",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "moodedits": {
    "date": "2026-11-03",
    "name": "Mood Edits",
    "why": "no exact-name artist on Spotify"
+  },
+  "mrk1": {
+   "date": "2026-11-09",
+   "name": "MRK1",
+   "why": "several same-name artists with matching genres"
+  },
+  "nakhane": {
+   "date": "2026-11-09",
+   "name": "Nakhane",
+   "why": "no genre tags and no release-name match"
   },
   "neekeetone": {
    "date": "2026-11-03",
@@ -447,6 +802,11 @@
    "date": "2026-11-03",
    "name": "Neon Beats",
    "why": "quality: only 56 followers"
+  },
+  "onerepublic": {
+   "date": "2026-11-09",
+   "name": "OneRepublic",
+   "why": "already mainstream (follower cap)"
   },
   "padthaisoundsystem": {
    "date": "2026-11-03",
@@ -461,6 +821,16 @@
   "pocho": {
    "date": "2026-11-03",
    "name": "Pocho",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "popnoname": {
+   "date": "2026-11-09",
+   "name": "PopNoName",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "preditah": {
+   "date": "2026-11-09",
+   "name": "Preditah",
    "why": "same-name artist(s) with unrelated genres"
   },
   "premiumluxurysuushmitaxbrooklynshanti": {
@@ -478,15 +848,50 @@
    "name": "Qechuaboi",
    "why": "quality: only 74 followers"
   },
+  "radiohead": {
+   "date": "2026-11-09",
+   "name": "Radiohead",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "ramadanman": {
+   "date": "2026-11-09",
+   "name": "Ramadanman",
+   "why": "quality: last release 2010"
+  },
+  "raudive": {
+   "date": "2026-11-09",
+   "name": "Raudive",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "raye": {
+   "date": "2026-11-09",
+   "name": "RAYE",
+   "why": "already mainstream (follower cap)"
+  },
   "romeosantos": {
    "date": "2026-11-03",
    "name": "Romeo Santos",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "rusko": {
+   "date": "2026-11-09",
+   "name": "Rusko",
+   "why": "already mainstream (follower cap)"
+  },
   "rythmebrise": {
    "date": "2026-11-03",
    "name": "Rythme Brisé",
    "why": "no genre tags and no release-name match"
+  },
+  "sabrinaclaudio": {
+   "date": "2026-11-09",
+   "name": "Sabrina Claudio",
+   "why": "already mainstream (follower cap)"
+  },
+  "sglewis": {
+   "date": "2026-11-09",
+   "name": "SG Lewis",
+   "why": "already mainstream (follower cap)"
   },
   "siliconesoul": {
    "date": "2026-11-03",
@@ -498,6 +903,11 @@
    "name": "Skream",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "smithnhack": {
+   "date": "2026-11-09",
+   "name": "Smith n Hack",
+   "why": "no genre tags and no release-name match"
+  },
   "smogo": {
    "date": "2026-11-03",
    "name": "Smogo",
@@ -507,6 +917,11 @@
    "date": "2026-11-03",
    "name": "Soul Judas",
    "why": "quality: only 4 followers"
+  },
+  "stormzy": {
+   "date": "2026-11-09",
+   "name": "Stormzy",
+   "why": "already mainstream (follower cap)"
   },
   "sunka": {
    "date": "2026-11-03",
@@ -518,9 +933,34 @@
    "name": "Su Real",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "teeza": {
+   "date": "2026-11-09",
+   "name": "Teeza",
+   "why": "no tracks found"
+  },
   "tenshu": {
    "date": "2026-11-03",
    "name": "Tenshu",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "thespaceape": {
+   "date": "2026-11-09",
+   "name": "The Spaceape",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "tiesto": {
+   "date": "2026-11-09",
+   "name": "Tiësto",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "timparis": {
+   "date": "2026-11-09",
+   "name": "Tim Paris",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "travisscott": {
+   "date": "2026-11-09",
+   "name": "Travis Scott",
    "why": "same-name artist(s) with unrelated genres"
   },
   "va": {
@@ -538,10 +978,20 @@
    "name": "Variscan",
    "why": "no genre tags and no release-name match"
   },
+  "vexd": {
+   "date": "2026-11-09",
+   "name": "Vex’d",
+   "why": "no exact-name artist on Spotify"
+  },
   "vond": {
    "date": "2026-11-03",
    "name": "Von D",
    "why": "no exact-name artist on Spotify"
+  },
+  "zomby": {
+   "date": "2026-11-09",
+   "name": "Zomby",
+   "why": "no tracks found"
   }
  }
 }
