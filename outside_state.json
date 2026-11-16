@@ -120,6 +120,18 @@
     "spotify:track:02nnSKmcAelEbzguQSX1jW"
    ]
   },
+  "champagnedrip": {
+   "date": "2026-11-16",
+   "name": "Champagne Drip",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:3uuZa5H3eAGgMfjFngvmrt",
+    "spotify:track:7t965wkcC0hYChDApy5oVy",
+    "spotify:track:3bYrD1uSwGiOCdVg8tUu3W"
+   ]
+  },
   "changeofcolours": {
    "date": "2026-10-31",
    "name": "Changeofcolours",
@@ -192,6 +204,18 @@
     "spotify:track:0qXS2Zsc2RrRAmnylsitqS"
    ]
   },
+  "drumattictwins": {
+   "date": "2026-11-16",
+   "name": "Drumattic Twins",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:3STDlaNlIQgSYsDtRXFL8B",
+    "spotify:track:7nQtE3wIh8WNnEXuq1sdym",
+    "spotify:track:03N40I7CmcWnSC4ZstWg4z"
+   ]
+  },
   "dusky": {
    "date": "2026-11-02",
    "name": "Dusky",
@@ -262,6 +286,42 @@
     "spotify:track:3BpCuhW3oYMoptwt6HGn5Y",
     "spotify:track:0RB8z2q7GJDkVaQYnkNABG",
     "spotify:track:041vCdnDLq3f4ytyaqpjjY"
+   ]
+  },
+  "holbaumann": {
+   "date": "2026-11-16",
+   "name": "Hol Baumann",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:6kJuEQDSzcv67Ghvaqcyci",
+    "spotify:track:6S4sbhLtab5Az0fwwMkkML",
+    "spotify:track:5xKIIa4yjmRWVF6GirWuVc"
+   ]
+  },
+  "huvanetwork": {
+   "date": "2026-11-16",
+   "name": "H.U.V.A. Network",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:35Fkc3cctib935tVctHuD3",
+    "spotify:track:4CifeS2HwRff5L5acCOEKr",
+    "spotify:track:4ytJOx7sxPzSqukoGTJqHB"
+   ]
+  },
+  "illtruth": {
+   "date": "2026-11-16",
+   "name": "Ill Truth",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1IBqXofjgJfN0xzCMNAlMe",
+    "spotify:track:2XU5kUXi8DSzMUaaHUoR9M",
+    "spotify:track:7gwsMTp7leqlt5DMHOvaTj"
    ]
   },
   "kaminanda": {
@@ -337,6 +397,30 @@
     "spotify:track:0D6UwDviry5kSa6DSRCUE5"
    ]
   },
+  "misanthrop": {
+   "date": "2026-11-16",
+   "name": "Misanthrop",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:0CHLWTzh8twA4OG8TX9yu8",
+    "spotify:track:0ZNGImZcpg47sYibWwuhdX",
+    "spotify:track:5xPyzfVhxA3by79JZCr4gR"
+   ]
+  },
+  "mysticalsun": {
+   "date": "2026-11-16",
+   "name": "Mystical Sun",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:38z8Y3l4W6hMCKN2P38pNy",
+    "spotify:track:6yl4EDentgDNB1PMmje0cj",
+    "spotify:track:552B3t7Y7TrRiWnlteAXsA"
+   ]
+  },
   "nahmean": {
    "date": "2026-10-31",
    "name": "Nah Mean",
@@ -374,6 +458,30 @@
     "spotify:track:1yot4G82x5PaZO8oOXbvIP"
    ]
   },
+  "phace": {
+   "date": "2026-11-16",
+   "name": "Phace",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:34Lr9yH9PUhn6WJcXmHi5k",
+    "spotify:track:5rSpU941YUtHswIVevHhWa",
+    "spotify:track:5ThxbbfD1qPcUn4okbjxTY"
+   ]
+  },
+  "plumpdjs": {
+   "date": "2026-11-16",
+   "name": "Plump DJs",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1eXMAlDFnfs5agAfs0SGUY",
+    "spotify:track:4ePrGRYRTmvQH9KxEsSG07",
+    "spotify:track:7MSdqHFSkn1RcU9xiZqawV"
+   ]
+  },
   "qzb": {
    "date": "2026-11-09",
    "name": "QZB",
@@ -396,6 +504,18 @@
     "spotify:track:3PmOvgl4M21ZbL5h5XHJMh",
     "spotify:track:2xgn7OkYdXsqRCpQ1qsNCu",
     "spotify:track:5KkqL16E13gpSZdjBYcbQb"
+   ]
+  },
+  "richiebrains": {
+   "date": "2026-11-16",
+   "name": "Richie Brains",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:5W5CmPc7CsXyV9Oq5KjsHs",
+    "spotify:track:0rVCD7psWyIXGHRuJkJqty",
+    "spotify:track:1MRGHYW2m0XjHnmRu98KGJ"
    ]
   },
   "santitugce": {
@@ -432,6 +552,17 @@
     "spotify:track:3zCLGGhhmpIcQJtwnVxxff",
     "spotify:track:0I9tcuy5MfjZQyVrtJXUxy",
     "spotify:track:0VAbv1z1R0bxxqEoQAHuDX"
+   ]
+  },
+  "skylark": {
+   "date": "2026-11-16",
+   "name": "Skylark",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:5hYP2vOSIzr181B8ZBu76c",
+    "spotify:track:1HWx6COZbd9ayzy47ZH5dx"
    ]
   },
   "solarfields": {
@@ -494,6 +625,54 @@
     "spotify:track:4E5GXRUtiutRmQXMzZ3gAk"
    ]
   },
+  "sync24": {
+   "date": "2026-11-16",
+   "name": "Sync24",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:4PrdFJuJndYz3QaTvqNz3q",
+    "spotify:track:5KneKB3roP8XMgzTY02UEi",
+    "spotify:track:2Wqo9Hm9kkvCbKJqlRQsTf"
+   ]
+  },
+  "thecaracalproject": {
+   "date": "2026-11-16",
+   "name": "The Caracal Project",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:0nonJpXOUxwbIqgCqL6Rdh",
+    "spotify:track:2GzLKB9LnboEfhKxFHuRfC",
+    "spotify:track:27hGDu6VTcXy0sugTIsDvv"
+   ]
+  },
+  "tripswitch": {
+   "date": "2026-11-16",
+   "name": "Tripswitch",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:1p2HBb5dbKDaWHLVypbuHH",
+    "spotify:track:6TtM0YVXaK6JFGOMWPbNNx",
+    "spotify:track:6IVT5GiIcEG32hQxWLGoRZ"
+   ]
+  },
+  "vacant": {
+   "date": "2026-11-16",
+   "name": "Vacant",
+   "sources": [
+    "similar"
+   ],
+   "uris": [
+    "spotify:track:4upQQ84w8NvWZ20vH8AXi5",
+    "spotify:track:1mMVFewaGBo5wPaamAoZU6",
+    "spotify:track:36YXSRhAOijeCwzFu50cRn"
+   ]
+  },
   "vibrasphere": {
    "date": "2026-11-09",
    "name": "Vibrasphere",
@@ -533,12 +712,18 @@
  "mbid": {
   "2cellos": "c8e94c78-0e17-4d9a-b1f6-96e1b22ebe97",
   "activation": "a723540f-10e1-45b4-b6e4-19f6699c5c4a",
+  "aesdana": "ed5cd4a2-0eb1-4e3b-a9b5-73547a6447da",
   "ahee": "4aa98da8-36d8-4652-b3fb-6693d725e88e",
   "akriza": "45c24658-8789-4fa0-ac12-1cebbf42b274",
   "alexserra": "3ed97821-7574-477b-9be8-c7e430c864c8",
   "alextype": "4f6992e8-780a-41c5-a2ec-7c35d7809991",
+  "anamsound": null,
   "antennae": "a16dff77-0022-4be2-ad68-ca0a35833126",
+  "arboreal": "65a30e8b-73d6-4a0b-834a-738fbcf64120",
+  "asherswissa": "541c9765-26c4-4e81-b5f1-212fe2764103",
+  "asura": "49a5f5b9-44f3-4db2-a9a8-db8773de4edc",
   "balkanbump": "dd15ffa0-db5e-48ea-ac23-57de134cef0c",
+  "biggigantic": "f6c003f9-4aae-40ce-8e4c-112d9a1b140c",
   "birdofprey": "f42d2a84-3d19-4e81-a92e-7a6dccd6ae61",
   "bluetech": "54980b39-7dea-4e2b-8b1f-21322a464ef5",
   "blvze": "c4d0dbec-5a2f-48fb-be3e-b19e5235305c",
@@ -548,18 +733,25 @@
   "chloepalmer": null,
   "clozee": "060fa1be-1db9-46ba-b06c-fb55e4eb895e",
   "congi": "ff41bb08-a652-4eb5-b164-ac2f3a04d215",
+  "connectchocolate": null,
+  "daggz": "173fcbb9-622e-4f3c-92db-66665860626e",
   "dailybread": "defd5f38-2374-494a-8467-094dd994e825",
   "dalehavana": "eb9123ea-5455-4265-930d-ae9f76ff0569",
   "desertdwellers": "a933a8ba-54b3-42d8-b2d8-a5fc5405d015",
+  "devaruna": "3b72edb8-c878-4b49-b839-118c3e2049b8",
   "deyadova": "4c7307ab-435a-4c3b-8c50-b63296ef38bc",
+  "dimondsaints": "1fa5ba11-f97a-489d-9f79-2a4f77c19487",
   "djtazrashid": "3a6dd4a9-1d88-4b60-a24c-7e1b69d51b13",
   "dto": "e9961744-2c4c-4328-bf5d-576a151e724f",
   "dzp": "d0f558dd-17a8-46db-8bc0-9e71e064803f",
   "elbuho": "0981102f-a51b-474e-849e-3756fe1fef64",
   "enzosiffredi": "6e622c66-5ff6-40a0-bfeb-2d426d6bb068",
   "eranhersh": "7ce997cb-9390-4afa-bd87-f3e08e645ecb",
+  "farbwende": "1aea3bfe-99e0-43d2-8892-acd11890979c",
+  "fredagain": "bca46a0c-25c9-42ca-98c2-e64c8a5e337e",
   "genish": "2dc8a424-11cb-46d5-92ff-8a3f223ef115",
   "gilieidelson": "fdee16dd-d7e5-474a-bef6-9ce47789fd82",
+  "greycode": "7e509567-cf10-4db4-84d3-81ccbb595e2c",
   "groovenomada": null,
   "grossomoddo": "484fd5f8-58ba-426c-857a-5d9e01424d84",
   "hamdi": "b716c12c-72e5-417e-b97b-7ade2bdb5030",
@@ -567,16 +759,21 @@
   "islandman": "dfa9708f-d04e-4570-bd88-efff20b0da29",
   "janaxpacha": "b02b589e-ea54-4e5a-aba9-85e00277afdc",
   "jesseklein": "a4dab5ea-9d6b-477f-9314-764839d97521",
+  "joezi": "9f8b084d-604f-4006-bc6b-0ae8eb199e87",
   "kapchiz": "7c50b43d-2db1-491a-93b8-90c70046f139",
+  "killap": "653bb476-c827-4236-88db-9351d8f8b520",
   "lilfish": "d3e32f3f-e560-484c-a8e7-1295d239b9f4",
   "limmz": "4f7a554a-cc8f-4dde-95dc-6444823e7e28",
   "lissat": "57f5b232-4b07-4cc6-8258-92eb3279a189",
   "lorenzo": "cad1843d-32ed-423b-ae38-ac50a190782f",
+  "lsdream": "3e8f5ad6-fcd4-416c-997e-5d7f6aa99043",
   "martinroth": "ed94ddc6-17ea-4886-8dfc-0476811838af",
   "mashti": "202e6a98-ba08-4d34-816e-d8b3ee2ac3dc",
+  "mathiasduplessy": "c720885f-2694-4174-bfeb-dd734af3178b",
   "maxtenrom": "f9985189-9e1c-4375-a687-37ad95a393a9",
   "mcfokus": "b475dd15-6d7a-4662-a2a8-41d55a298421",
   "mestiza": "787549fa-293c-4e4e-8e5f-e94f87d63ae8",
+  "moontricks": "23fc6dff-c119-432e-b9e8-2f712a0bdd6d",
   "mose": null,
   "mow": "f14a7ae1-d9b8-4a84-8082-49555093e3c2",
   "mph": "59fb9339-0065-42e9-8c2c-110c9f7eb863",
@@ -584,28 +781,40 @@
   "mythm": "68d73b2b-b75e-4195-a596-07e93d0924d0",
   "nueq": "9017919a-2ff0-47b3-95cf-716abc2a8021",
   "nyrus": "c46ddcdb-bde4-4af5-bd08-f33e5aab4657",
+  "omary": "bfdc4ecc-5f66-4199-9a50-3d36687e19c2",
+  "omergonenhaela": null,
   "omiki": "fa6ce5aa-14e8-4dc3-bd41-a56ed7708b75",
   "pauza": "20046abe-49f0-435d-b7b4-c20d7f0269bc",
   "pav4n": "47b2f72c-8ef2-4340-8a94-7d0d03182a9f",
   "peppecitarella": "c8b7a65a-f7b4-4bbf-8ca8-7d62a4e5f102",
   "peterpower": "2c4453a2-070e-4043-b439-fa21cbedabc8",
   "phoria": "42775679-dbc0-421c-b63b-9119ed42c91e",
+  "pushloop": "779bc6e0-620e-4d90-aeb3-a7061ba349f5",
   "ramdass": "76ba5dd7-3064-48cd-b3e0-ac4d68bdd0e8",
   "richardgrey": "45e1cf3c-33e7-4fc1-b033-eb0907c4db6a",
   "rubychase": "cb9d0a75-400a-4a2e-be5f-e85526b55226",
   "safar": "924fbf68-bfa7-4c79-9253-97190fc9e50a",
   "sateyed": "d72c1e76-208b-4714-9bb9-f03b1e6f7aed",
   "scottnice": "0da3b68f-758f-4d83-bfef-6e6ba5cf4312",
+  "shaitsabari": null,
+  "sharethelight": null,
   "skysia": "3445e8dd-5318-4b3a-bedf-a28d455f4252",
+  "snuffy": "f79a6390-442f-43e4-a543-4efc958e3be9",
   "soundsofsirin": null,
+  "stantonwarriors": "ba07d1f0-9839-43f5-b88e-f4b93b6b05f1",
   "starmonster": "11b6968b-b13a-46c5-92c4-726a4f02641d",
   "strategy": "176d2217-11a2-40ed-bd72-6d16769fe044",
+  "stylust": "a8da3c83-6e0b-4e4a-8ed9-c528323c75f7",
+  "sublab": "d963619d-0a49-4c91-94d7-1f49f48b9355",
   "tahum": "af89a29e-b358-43cc-b3e8-206a820be49e",
   "thegreatmedicineshow": "adaf1d32-15f6-42dd-af13-eeed1d077c2f",
   "thornato": "6a599fc4-991b-43d5-9355-12f58191a739",
   "timschaufert": "359b5f11-4f96-43f7-8bfa-53786c104e80",
+  "tinlicker": "2d098124-cb9d-4e80-992f-47e47c405452",
   "tropo": "8f9d785a-022a-43eb-a2a0-22eb1966c599",
   "truth": "bfad21ad-c2fa-47f2-8d12-d9f9da8bbff1",
+  "twerkaba": null,
+  "twolanes": "3f808f31-4631-43f4-81b7-c98594744421",
   "visages": "73c1b3ba-19c8-41c5-b627-d5c74c20a5e0",
   "wingz": "94e94212-ca07-4b64-8025-d1a5f202ab8b",
   "yaima": "6c40515b-918b-48c3-829f-abbeb7a9ca85",
@@ -613,9 +822,25 @@
   "yemanjo": "7c702a82-6f23-4507-a6a1-9ad801e96054"
  },
  "promoted": {
+  "abakus": {
+   "date": "2026-11-16",
+   "name": "Abakus"
+  },
+  "aesdana": {
+   "date": "2026-11-16",
+   "name": "AES Dana"
+  },
   "alextype": {
    "date": "2026-11-09",
    "name": "Alex Type"
+  },
+  "androcell": {
+   "date": "2026-11-16",
+   "name": "Androcell"
+  },
+  "asura": {
+   "date": "2026-11-16",
+   "name": "Asura"
   },
   "birdofprey": {
    "date": "2026-11-09",
@@ -629,13 +854,29 @@
    "date": "2026-11-09",
    "name": "Congi"
   },
+  "dlr": {
+   "date": "2026-11-16",
+   "name": "DLR"
+  },
+  "greycode": {
+   "date": "2026-11-16",
+   "name": "Grey Code"
+  },
   "groovenomada": {
    "date": "2026-11-09",
    "name": "Groove Nomada"
   },
+  "halfred": {
+   "date": "2026-11-16",
+   "name": "Halfred"
+  },
   "kapchiz": {
    "date": "2026-11-09",
    "name": "Kapchiz"
+  },
+  "koan": {
+   "date": "2026-11-16",
+   "name": "Koan"
   },
   "mcfokus": {
    "date": "2026-11-09",
@@ -649,12 +890,57 @@
    "date": "2026-11-09",
    "name": "Sateyed"
   },
+  "solarfields": {
+   "date": "2026-11-16",
+   "name": "Solar Fields"
+  },
+  "sublab": {
+   "date": "2026-11-16",
+   "name": "Sublab"
+  },
+  "sustance": {
+   "date": "2026-11-16",
+   "name": "Sustance"
+  },
   "wingz": {
    "date": "2026-11-09",
    "name": "Wingz"
   }
  },
- "rejected": {},
+ "rejected": {
+  "caropampillo": {
+   "date": "2026-11-16",
+   "name": "Caro Pampillo"
+  },
+  "cygorman": {
+   "date": "2026-11-16",
+   "name": "Cy Gorman"
+  },
+  "kaminanda": {
+   "date": "2026-11-16",
+   "name": "Kaminanda"
+  },
+  "manchosounds": {
+   "date": "2026-11-16",
+   "name": "MANCHO sounds"
+  },
+  "nicholaspeters": {
+   "date": "2026-11-16",
+   "name": "Nicholas Peters"
+  },
+  "reasaroo": {
+   "date": "2026-11-16",
+   "name": "Reasaroo"
+  },
+  "santitugce": {
+   "date": "2026-11-16",
+   "name": "Santi & Tuğçe"
+  },
+  "submarine": {
+   "date": "2026-11-16",
+   "name": "Submarine"
+  }
+ },
  "runs": [
   {
    "added": 14,
@@ -667,29 +953,39 @@
   {
    "added": 15,
    "date": "2026-11-09"
+  },
+  {
+   "added": 15,
+   "date": "2026-11-16"
   }
  ],
  "seed_last_used": {
   "2cellos": "2026-11-09",
   "aaronsevilla": "2026-10-31",
   "activation": "2026-11-02",
+  "aesdana": "2026-11-16",
   "ahee": "2026-11-09",
   "aitch": "2026-10-31",
   "akriza": "2026-11-09",
   "alchemysound": "2026-10-31",
   "alexserra": "2026-11-02",
-  "alextype": "2026-11-09",
+  "alextype": "2026-11-16",
   "amanati": "2026-10-31",
+  "anamsound": "2026-11-16",
   "antennae": "2026-11-09",
+  "arboreal": "2026-11-16",
   "asadi": "2026-10-31",
+  "asherswissa": "2026-11-16",
+  "asura": "2026-11-16",
   "atyya": "2026-10-31",
   "baiuca": "2026-10-31",
   "balkanbump": "2026-11-02",
   "basstemple": "2026-10-31",
-  "birdofprey": "2026-11-09",
+  "biggigantic": "2026-11-16",
+  "birdofprey": "2026-11-16",
   "blaudiss": "2026-10-31",
   "bloomurian": "2026-10-31",
-  "bluetech": "2026-11-09",
+  "bluetech": "2026-11-16",
   "blvze": "2026-11-02",
   "borne": "2026-11-02",
   "bronzesun": "2026-11-09",
@@ -698,13 +994,17 @@
   "chantressseba": "2026-11-02",
   "chloepalmer": "2026-11-09",
   "clozee": "2026-11-02",
-  "congi": "2026-11-09",
+  "congi": "2026-11-16",
+  "connectchocolate": "2026-11-16",
   "contra": "2026-10-31",
+  "daggz": "2026-11-16",
   "dailybread": "2026-11-09",
   "dalehavana": "2026-11-09",
   "davidstarfire": "2026-10-31",
   "desertdwellers": "2026-11-09",
+  "devaruna": "2026-11-16",
   "deyadova": "2026-11-02",
+  "dimondsaints": "2026-11-16",
   "djtazrashid": "2026-11-09",
   "dto": "2026-11-02",
   "dzp": "2026-11-09",
@@ -713,9 +1013,12 @@
   "enzosiffredi": "2026-11-02",
   "equanimous": "2026-10-31",
   "eranhersh": "2026-11-09",
+  "farbwende": "2026-11-16",
+  "fredagain": "2026-11-16",
   "genish": "2026-11-09",
   "gilieidelson": "2026-11-02",
-  "groovenomada": "2026-11-09",
+  "greycode": "2026-11-16",
+  "groovenomada": "2026-11-16",
   "grossomoddo": "2026-11-09",
   "hamdi": "2026-11-02",
   "hugel": "2026-10-31",
@@ -725,9 +1028,11 @@
   "iyakuh": "2026-10-31",
   "janaxpacha": "2026-11-09",
   "jesseklein": "2026-11-09",
+  "joezi": "2026-11-16",
   "joshteed": "2026-10-31",
-  "kapchiz": "2026-11-09",
+  "kapchiz": "2026-11-16",
   "keysnkrates": "2026-10-31",
+  "killap": "2026-11-16",
   "kr3ture": "2026-10-31",
   "lightlanguage": "2026-10-31",
   "lilfish": "2026-11-09",
@@ -735,12 +1040,15 @@
   "liquidbloom": "2026-10-31",
   "lissat": "2026-11-02",
   "lorenzo": "2026-11-09",
+  "lsdream": "2026-11-16",
   "mahzetar": "2026-10-31",
   "martinroth": "2026-11-02",
   "mashti": "2026-11-02",
+  "mathiasduplessy": "2026-11-16",
   "maxtenrom": "2026-11-09",
-  "mcfokus": "2026-11-09",
+  "mcfokus": "2026-11-16",
   "mestiza": "2026-11-02",
+  "moontricks": "2026-11-16",
   "morillo": "2026-10-31",
   "mose": "2026-11-02",
   "mow": "2026-11-02",
@@ -749,6 +1057,8 @@
   "mythm": "2026-11-09",
   "nueq": "2026-11-09",
   "nyrus": "2026-11-02",
+  "omary": "2026-11-16",
+  "omergonenhaela": "2026-11-16",
   "omiki": "2026-11-02",
   "orenda": "2026-10-31",
   "orka": "2026-10-31",
@@ -756,23 +1066,30 @@
   "pav4n": "2026-11-09",
   "peekaboo": "2026-10-31",
   "peppecitarella": "2026-11-02",
-  "peterpower": "2026-11-09",
+  "peterpower": "2026-11-16",
   "phoria": "2026-11-02",
   "pondora": "2026-10-31",
   "porangui": "2026-10-31",
+  "pushloop": "2026-11-16",
   "ramdass": "2026-11-02",
   "richardgrey": "2026-11-02",
   "rubychase": "2026-11-02",
   "safar": "2026-11-02",
-  "sateyed": "2026-11-09",
+  "sateyed": "2026-11-16",
   "saturna": "2026-10-31",
   "savej": "2026-10-31",
   "scottnice": "2026-11-02",
+  "shaitsabari": "2026-11-16",
+  "sharethelight": "2026-11-16",
   "skrillex": "2026-10-31",
   "skysia": "2026-11-02",
+  "snuffy": "2026-11-16",
   "soundsofsirin": "2026-11-09",
+  "stantonwarriors": "2026-11-16",
   "starmonster": "2026-11-09",
   "strategy": "2026-11-02",
+  "stylust": "2026-11-16",
+  "sublab": "2026-11-16",
   "tahum": "2026-11-02",
   "templestepproject": "2026-10-31",
   "thegreatmedicineshow": "2026-11-02",
@@ -780,19 +1097,32 @@
   "thepolishambassador": "2026-10-31",
   "thornato": "2026-11-02",
   "timschaufert": "2026-11-09",
+  "tinlicker": "2026-11-16",
   "tomenzy": "2026-10-31",
   "tropo": "2026-11-02",
   "troyboi": "2026-10-31",
   "truth": "2026-11-02",
+  "twerkaba": "2026-11-16",
+  "twolanes": "2026-11-16",
   "visages": "2026-11-09",
-  "wingz": "2026-11-09",
+  "wingz": "2026-11-16",
   "yaima": "2026-11-09",
   "yehezkelraz": "2026-11-09",
   "yemanjo": "2026-11-02",
   "zumadionys": "2026-10-31"
  },
- "tag_cursor": 18,
+ "tag_cursor": 0,
  "unsure": {
+  "aether": {
+   "date": "2026-11-16",
+   "name": "Aether",
+   "why": "no tracks found"
+  },
+  "agnesobel": {
+   "date": "2026-11-16",
+   "name": "Agnes Obel",
+   "why": "already mainstream (follower cap)"
+  },
   "ak": {
    "date": "2026-11-09",
    "name": "AK",
@@ -813,15 +1143,30 @@
    "name": "Ayla Nereo",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "bobmarley": {
+   "date": "2026-11-16",
+   "name": "Bob Marley",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "boniver": {
    "date": "2026-11-02",
    "name": "Bon Iver",
+   "why": "already mainstream (follower cap)"
+  },
+  "bonobo": {
+   "date": "2026-11-16",
+   "name": "Bonobo",
    "why": "already mainstream (follower cap)"
   },
   "carbonbasedlifeforms": {
    "date": "2026-11-09",
    "name": "Carbon Based Lifeforms",
    "why": "already mainstream (follower cap)"
+  },
+  "cell": {
+   "date": "2026-11-16",
+   "name": "Cell",
+   "why": "no tracks found"
   },
   "chanchaviacircuito": {
    "date": "2026-11-02",
@@ -833,10 +1178,20 @@
    "name": "Chromabeats",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "cracker": {
+   "date": "2026-11-16",
+   "name": "Cracker",
+   "why": "already mainstream (follower cap)"
+  },
   "ddht2021": {
    "date": "2026-11-02",
    "name": "D∆D H∆T 20²1",
    "why": "no tracks found"
+  },
+  "deadmau5": {
+   "date": "2026-11-16",
+   "name": "deadmau5",
+   "why": "already mainstream (follower cap)"
   },
   "djdisc": {
    "date": "2026-11-02",
@@ -853,6 +1208,16 @@
    "name": "djtx",
    "why": "no genre tags and no release-name match"
   },
+  "drs": {
+   "date": "2026-11-16",
+   "name": "DRS",
+   "why": "no exact-name artist on Spotify"
+  },
+  "elifur": {
+   "date": "2026-11-16",
+   "name": "Eli & Fur",
+   "why": "already mainstream (follower cap)"
+  },
   "example": {
    "date": "2026-11-09",
    "name": "Example",
@@ -863,10 +1228,20 @@
    "name": "Fedde Le Grand",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "fixedpoint": {
+   "date": "2026-11-16",
+   "name": "Fixed Point",
+   "why": "no genre tags and no release-name match"
+  },
   "gest": {
    "date": "2026-11-09",
    "name": "GEST",
    "why": "no tracks found"
+  },
+  "ghetts": {
+   "date": "2026-11-16",
+   "name": "Ghetts",
+   "why": "already mainstream (follower cap)"
   },
   "ghostsincars": {
    "date": "2026-11-02",
@@ -888,10 +1263,20 @@
    "name": "Gryffin",
    "why": "already mainstream (follower cap)"
   },
+  "guts": {
+   "date": "2026-11-16",
+   "name": "Guts",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "infamousalchemist": {
    "date": "2026-11-02",
    "name": "InFamous Alchemist",
    "why": "no exact-name artist on Spotify"
+  },
+  "jamiexx": {
+   "date": "2026-11-16",
+   "name": "Jamie xx",
+   "why": "already mainstream (follower cap)"
   },
   "janumangarcia": {
    "date": "2026-11-02",
@@ -913,6 +1298,11 @@
    "name": "Khruangbin",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "kwesi": {
+   "date": "2026-11-16",
+   "name": "Kwesi",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "lane8": {
    "date": "2026-11-02",
    "name": "Lane 8",
@@ -922,6 +1312,11 @@
    "date": "2026-11-09",
    "name": "Lindsey Stirling",
    "why": "same-name artist(s) with unrelated genres"
+  },
+  "liquidstranger": {
+   "date": "2026-11-16",
+   "name": "Liquid Stranger",
+   "why": "already mainstream (follower cap)"
   },
   "losparientesdeplayavicente": {
    "date": "2026-11-02",
@@ -983,6 +1378,11 @@
    "name": "No. Side - Music",
    "why": "no exact-name artist on Spotify"
   },
+  "panama": {
+   "date": "2026-11-16",
+   "name": "Panama",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "panamerican": {
    "date": "2026-11-02",
    "name": "Pan•American",
@@ -998,6 +1398,11 @@
    "name": "P Music Store",
    "why": "no exact-name artist on Spotify"
   },
+  "prettylights": {
+   "date": "2026-11-16",
+   "name": "Pretty Lights",
+   "why": "same-name artist(s) with unrelated genres"
+  },
   "quantic": {
    "date": "2026-11-09",
    "name": "Quantic",
@@ -1006,6 +1411,11 @@
   "randomrab": {
    "date": "2026-11-09",
    "name": "Random Rab",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "romy": {
+   "date": "2026-11-16",
+   "name": "Romy",
    "why": "same-name artist(s) with unrelated genres"
   },
   "shpongle": {
@@ -1017,6 +1427,11 @@
    "date": "2026-11-02",
    "name": "Shroommate",
    "why": "no exact-name artist on Spotify"
+  },
+  "skeler": {
+   "date": "2026-11-16",
+   "name": "skeler.",
+   "why": "same-name artist(s) with unrelated genres"
   },
   "skinshape": {
    "date": "2026-11-02",
@@ -1043,6 +1458,21 @@
    "name": "Strange Bones",
    "why": "no genre tags and no release-name match"
   },
+  "suzannevega": {
+   "date": "2026-11-16",
+   "name": "Suzanne Vega",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "taylrrenee": {
+   "date": "2026-11-16",
+   "name": "Taylr Renee",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "theblessedmadonna": {
+   "date": "2026-11-16",
+   "name": "The Blessed Madonna",
+   "why": "already mainstream (follower cap)"
+  },
   "thepianoguys": {
    "date": "2026-11-09",
    "name": "The Piano Guys",
@@ -1053,6 +1483,16 @@
    "name": "tigerlily",
    "why": "same-name artist(s) with unrelated genres"
   },
+  "tompettyandtheheartbreakers": {
+   "date": "2026-11-16",
+   "name": "Tom Petty and the Heartbreakers",
+   "why": "same-name artist(s) with unrelated genres"
+  },
+  "tycho": {
+   "date": "2026-11-16",
+   "name": "Tycho",
+   "why": "already mainstream (follower cap)"
+  },
   "variousartists": {
    "date": "2026-11-02",
    "name": "Various Artists",
@@ -1062,6 +1502,11 @@
    "date": "2026-11-02",
    "name": "Whitedove Steve Chard",
    "why": "no exact-name artist on Spotify"
+  },
+  "wiley": {
+   "date": "2026-11-16",
+   "name": "Wiley",
+   "why": "already mainstream (follower cap)"
   }
  }
 }
